@@ -1,3 +1,10 @@
 User Stories
 
-A user can search and get a list of recipes by submitting a search form
+------
+
+A user can see the most recent 5 searches 
+
+A user can search for shows around a specific location and by genre (optional)
+
+The program returns a list of 10 shows, information on each of the artists, and a youtube video showing an example of their work
+
