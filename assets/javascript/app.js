@@ -4,7 +4,7 @@ const eventful_api_key = `G6bFxWDSpqCDTwjr`;                        // Eventful 
 const yt_api_key       = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`; // YouTube API Key
 
 
-function getEvents(q,where) // We should pass more arguments based on the userser searches
+function getEvents(q,where,date) // We should pass more arguments based on the userser searches
 {
 
    // API Query parameters
@@ -13,7 +13,7 @@ function getEvents(q,where) // We should pass more arguments based on the userse
       app_key: eventful_api_key,
       q: q,
       where: where, 
-      "date": "february",
+      date: date,
       page_size: 10
 
    };
@@ -78,7 +78,7 @@ function getYouTubeVideo(q,div){
 $(document).ready(function(){
 
 	getYouTubeVideo("village people","video");
-  getEvents("music","Durham");
+  getEvents("music","Durham","February");
 
 });
 
