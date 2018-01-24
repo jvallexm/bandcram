@@ -4,7 +4,7 @@ const eventful_api_key = `G6bFxWDSpqCDTwjr`;                        // Eventful 
 const yt_api_key       = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`; // YouTube API Key
 
 
-function getEvents(q,where)
+function getEvents(q,where) // We should pass more arguments based on the userser searches
 {
 
    // API Query parameters
@@ -33,17 +33,17 @@ function getEvents(q,where)
 
         // If the event has multiple perfomers listed, it gets a video for the name of the first one in the array
         if(typeof(event.performer) === "array"){   
-            getYouTubeVideo(event.performer[0].name);        
+            getYouTubeVideo(event.performer[0].name,"video");        
         }
 
         // If the event has only one performer listed, it searches for that name
         else if(typeof(event.performer) === "object"){
-            getYouTubeVideo(event.performer.performer.name);
+            getYouTubeVideo(event.performer.performer.name,"video");
         }
 
         // Otherwise it gets a video based on the event title
         else{
-            getYouTubeVideo(event.title);
+            getYouTubeVideo(event.title,"video");
         }
           
       }
@@ -69,7 +69,7 @@ function getYouTubeVideo(q,div){
           	  console.log(data);
               $("<h1>").text(q).appendTo("#video");
               $("<iframe>").attr("src", "https://www.youtube.com/embed/" + data.items[0].id.videoId)
-             			   .attr("frameborder","0").appendTo("#video");
+             			   .attr("frameborder","0").appendTo("#" + div); 
 
           });
     
