@@ -1,6 +1,8 @@
 
 
-const eventful_api_key = `G6bFxWDSpqCDTwjr`;
+const eventful_api_key = `G6bFxWDSpqCDTwjr`;                        // Eventful API Key
+const yt_api_key       = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`; // YouTube API Key
+
 
 function getEvents(q,where)
 {
@@ -29,30 +31,28 @@ function getEvents(q,where)
 
         let event = eventsArray[i]; //The current event
 
-        // If the event has no perfomer listed, it searches for a video of the event title
-        if(event.performer === null || event.performer === undefined)
-            getYouTubeVideo(eventsArray[i].title);
+        // If the event has multiple perfomers listed, it gets a video for the name of the first one in the array
+        if(typeof(event.performer) === "array"){   
+            getYouTubeVideo(event.performer[0].name);        
+        }
 
         // If the event has only one performer listed, it searches for that name
-        else if(typeof(event.performer) === "object")
+        else if(typeof(event.performer) === "object"){
             getYouTubeVideo(event.performer.performer.name);
+        }
 
-        // If the event has multiple perfomers listed, it gets a video for the name of the first one in the array
-        else
-            getYouTubeVideo(event.performer[0].name);
+        // Otherwise it gets a video based on the event title
+        else{
+            getYouTubeVideo(event.title);
+        }
           
       }
 
     });
+
 }
 
-// Bandsintown search
-
-// Youtube search
-
-const yt_api_key = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`; //YouTube API Key
-
-// Searches YouTube for a single video q and returns a Youtube video iframe
+// Searches YouTube for a single video q and appends it to a div
 
 function getYouTubeVideo(q,div){
 
