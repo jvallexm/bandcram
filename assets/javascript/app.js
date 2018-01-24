@@ -1,6 +1,50 @@
 
 
-// Eventful search
+const eventful_api_key = `G6bFxWDSpqCDTwjr`;
+
+function getEvents(q,where)
+{
+
+   // API Query parameters
+   var oArgs = {
+
+      app_key: eventful_api_key,
+      q: q,
+      where: where, 
+      "date": "february",
+      page_size: 10
+
+   };
+
+   EVDB.API.call("/events/search", oArgs, function(oData) {
+
+      // Shows the events array from api call
+      console.log(oData.events.event);
+
+      // Events array from api call 
+      let eventsArray = oData.events.event;
+
+      // Reders videos for each of the events
+      for(let i = 0 ; i < eventsArray.length ; ++i){
+
+        let event = eventsArray[i]; //The current event
+
+        // If the event has no perfomer listed, it searches for a video of the event title
+        if(event.performer === null || event.performer === undefined)
+            getYouTubeVideo(eventsArray[i].title);
+
+        // If the event has only one performer listed, it searches for that name
+        else if(typeof(event.performer) === "object")
+            getYouTubeVideo(event.performer.performer.name);
+
+        // If the event has multiple perfomers listed, it gets a video for the name of the first one in the array
+        else
+            getYouTubeVideo(event.performer[0].name);
+          
+      }
+
+    });
+}
 
 // Bandsintown search
 
@@ -23,8 +67,9 @@ function getYouTubeVideo(q,div){
           },function(data){
 
           	  console.log(data);
+              $("<h1>").text(q).appendTo("#video");
               $("<iframe>").attr("src", "https://www.youtube.com/embed/" + data.items[0].id.videoId)
-             			   .attr("frameborder","0").appendTo("#" + div);
+             			   .attr("frameborder","0").appendTo("#video");
 
           });
     
@@ -33,6 +78,7 @@ function getYouTubeVideo(q,div){
 $(document).ready(function(){
 
 	getYouTubeVideo("village people","video");
+  getEvents("music","Durham");
 
 });
 
