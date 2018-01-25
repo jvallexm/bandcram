@@ -5,7 +5,7 @@ const yt_api_key        = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`;    // YouTu
 const google_places_key = `AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E`;    // Google Places API Key
 
 
-function getEvents(q,where,date) // We should pass more arguments based on the userser searches
+function getEvents(q,where,date,results) // We should pass more arguments based on the userser searches
 {
 
    // API Query parameters
@@ -15,7 +15,7 @@ function getEvents(q,where,date) // We should pass more arguments based on the u
       q: q, 
       where: where, 
       date: date,
-      page_size: 10
+      page_size: results
 
    };
 
@@ -31,31 +31,32 @@ function getEvents(q,where,date) // We should pass more arguments based on the u
       for(let i = 0 ; i < eventsArray.length ; ++i){
 
         let event = eventsArray[i]; //The current event
+        renderResult(i);
 
         console.log(event.title);
         console.log(event);
         
         if(i==0){
-          makeGoogleMap(event.latitude,event.longitude,"map","parking",1000);
+           makeGoogleMap(event.latitude,event.longitude,"map","parking",1000);
         }
 
         // If the event has multiple perfomers listed, it gets a video for the name of the first one in the array
         if(typeof(event.performers) === "array"){
 
-            getYouTubeVideo(event.performers[0].name,"video");        
+            getYouTubeVideo(event.performers[0].name,"video-" + i);        
 
         }
 
         // If the event has only one performer listed, it searches for that name
         else if(typeof(event.performer) === "object"){
 
-            getYouTubeVideo(event.performers.performer.name,"video");
+            getYouTubeVideo(event.performers.performer.name,"video-" + i);
 
         }
 
         // Otherwise it gets a video based on the event title
         else{
-            getYouTubeVideo(event.title,"video");
+            getYouTubeVideo(event.title,"video-" + i);
         }
           
       }
@@ -96,9 +97,6 @@ function makeGoogleMap(lat,lon,div,near,radius){
       }
 
       function callback(results, status) {
-        console.log(results);
-        window.open(results);
-        console.log(status);
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           for (var i = 0; i < results.length; i++) {
             createMarker(results[i]);
@@ -148,10 +146,37 @@ function getYouTubeVideo(q,div){
     
 }
 
+function renderResult(i){
+
+
+  let videoGoesHere    = $("<div>").addClass("embed-responsive embed-responsive-16by9")
+                                   .attr("id","video-" + i);
+
+  let videoCardTitle   = $("<span>").addClass("card-title")
+                                    .attr("id","card-title-" + i)
+                                    .text("Placeholder");
+
+  let videoCardContent = $("<div>").addClass("card-content")
+                                   .append(videoCardTitle);
+
+  let videoCardImage   = $("<div>").addClass("card-image")
+                                   .append(videoGoesHere)
+                                   .append(videoCardContent);
+
+  let videoCard        = $("<div>").addClass("card")
+                                   .append(videoCardImage);
+
+  let videoCol         = $("<div>").addClass("col-xs-4")
+                                   .append(videoCard);
+
+  videoCard.appendTo("#results");
+
+
+}
+
 $(document).ready(function(){
 
-	getYouTubeVideo("village people","video");
-  getEvents("music","Durham","February");
+  getEvents("music","Durham","February",10);
 
 });
 
