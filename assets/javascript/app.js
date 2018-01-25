@@ -14,7 +14,8 @@ function getEvents(q,where,date,results) // We should pass more arguments based 
       q: q, 
       where: where, 
       date: date,
-      page_size: results
+      page_size: results,
+      sort_order: "popularity"
       
     };
 
@@ -27,27 +28,28 @@ function getEvents(q,where,date,results) // We should pass more arguments based 
         for (let i = 0; i < eventsArray.length; ++i) {
 
             let event = eventsArray[i]; //The current event
-            renderResult(i);
+
+            renderResult(i,event.title,event.venue_address);
 
             //console.log(event.title);
             console.log(event);
             console.log(event.performers);
             if(event.performers === null){
-              getYouTubeVideo(event.title, "video-" + i);
+              getYouTubeVideo(event.title, i);
             }
 
             // If the event has multiple perfomers listed, it gets a video for the name of the first one in the array
             else if(typeof(event.performers) === "array"){ 
-              getYouTubeVideo(event.performers[i].name,"video-" + i); 
+              getYouTubeVideo(event.performers[i].name, i); 
             }
 
             // If the event has only one performer listed, it searches for that name
             else if (typeof(event.performers) === "object"){
 
-              getYouTubeVideo(event.performers.performer.name,"video-" + i);
+              getYouTubeVideo(event.performers.performer.name, i);
             
             } else {
-              getYouTubeVideo(event.title, "video-" + i);
+              getYouTubeVideo(event.title, i);
             }
 
             makeGoogleMap(i,event.latitude,event.longitude,"map-" + i,"parking",1000);  
@@ -124,7 +126,7 @@ function makeGoogleMap(i,lat, lon, div, near, radius){
 
 // Searches YouTube for a single video q and appends it to a div
 
-function getYouTubeVideo(q, div) {
+function getYouTubeVideo(q,i) {
 
     $.get(`https://www.googleapis.com/youtube/v3/search`,
         {
@@ -133,11 +135,17 @@ function getYouTubeVideo(q, div) {
             maxResults: 1,
             type: 'video',
             key: yt_api_key
+
         }, function (data) {
-            console.log("searched for " + q);
-            console.log(data);
+
+            //console.log("searched for " + q);
+            //console.log(data);
+
+            //$("#video-title-" + i).text(q);
+
             $("<iframe>").attr("src", "https://www.youtube.com/embed/" + data.items[0].id.videoId)
-                .attr("frameborder", "0").appendTo("#" + div);
+                .attr("frameborder", "0").appendTo("#video-" + i);
+
         });
 
 }
@@ -154,10 +162,41 @@ function newSpan(addClass){
 
 }
 
-function renderResult(i){
+function renderResult(i,title,desc){
+
+  let panel = newDiv("panel-body");
+
+  let panelTitle = $("<h1>").text(title);
+
+  let panelDesc = $("<p>").text(desc);
+
+  panel.append(panelTitle);
+  panel.append(panelDesc);
+
 
   let row = newDiv("row");
 
+  let phGoesHere      = newDiv("embed-responsive embed-responsive-16by9")
+                                   .attr("id","ph-" + i);
+
+  let phCardTitle     = newSpan("card-title")
+                                    .attr("id","ph-title-" + i)
+                                    .text("Placeholder");
+
+  let phCardContent   = newDiv("card-content")
+                                   .append(phCardTitle);
+
+  let phCardImage     = newDiv("card-image")
+                                   .append(phGoesHere)
+                                   .append(phCardContent);
+
+  let phCard          = newDiv("card")
+                                   .append(phCardImage);
+
+  let phCol           = newDiv("col-xs-4")
+                                   .append(phCard);
+
+  row.append(phCol);
 
   let mapGoesHere      = newDiv("embed-responsive embed-responsive-16by9")
                                    .attr("id","map-" + i);
@@ -188,7 +227,7 @@ function renderResult(i){
 
   let videoCardTitle   = newSpan("card-title")
                                     .attr("id","video-title-" + i)
-                                    .text("Placeholder");
+                                    .text("Watch");
 
   let videoCardContent = newDiv("card-content")
                                    .append(videoCardTitle);
@@ -205,7 +244,13 @@ function renderResult(i){
 
   row.append(videoCol);
 
-  $("#results").append(row);
+  panel.append(row);
+
+  let topPanel = newDiv("panel panel-default");
+
+  topPanel.append(panel);
+
+  $("#results").append(topPanel);
 
 
 }
