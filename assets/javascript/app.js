@@ -1,8 +1,8 @@
 
 
 const eventful_api_key = `G6bFxWDSpqCDTwjr`;                           // Eventful API Key
-const yt_api_key = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`;    // YouTube API Key
-const google_places_key = `AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E`;    // Google Places API Key
+const yt_api_key = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`;          // YouTube API Key
+const google_places_key = `AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E`;   // Google Places API Key
 
 function getEvents(q,where,date,results) // We should pass more arguments based on the userser searches
 {
