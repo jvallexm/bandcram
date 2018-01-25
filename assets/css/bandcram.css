@@ -9,15 +9,15 @@ body {
 }
 
 .navbar {
-	min-height: 80px;
+    min-height: 80px;
 }
 
 a.navbar-brand {
-	padding-top: 6px;
+    padding-top: 6px;
 }
 
 .artist-results{
-	background-color: lightgrey;
+    background-color: lightgrey;
 }
 
 .card .card-image{
@@ -28,7 +28,6 @@ a.navbar-brand {
     -o-transform-style: preserve-3d;
     transform-style: preserve-3d;
 }
-
 
 .card{
     margin-top: 10px;
