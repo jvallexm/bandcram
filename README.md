@@ -13,9 +13,9 @@ An app that give you quick at a glance information on local shows.
 * [Google Places Library](https://developers.google.com/places/) - Used to render maps of restaurants or parking nearby from the Google Places API
 * [YouTube API](https://developers.google.com/youtube/) - Used to find videos related to each event
 
-Authors
+## Authors
 
-David Coulombe
-Peter Johnstone
-Ziad Siddique
-Jennifer Valle
+* [David Coulombe](https://github.com/DaveyStacks)
+* [Peter Johnstone](https://github.com/p2bilt)
+* [Ziad Siddique](https://github.com/zssiddique)
+* [Jennifer Valle](https://github.com/jvallexm)
