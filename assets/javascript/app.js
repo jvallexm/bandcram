@@ -73,10 +73,12 @@ function makeGoogleMap(i,lat, lon, div, near, radius){
     function initMap() {
 
         console.log("init map");
+
         var pyrmont = {
             lat: parseFloat(lat),
             lng: parseFloat(lon)
-        };4
+        };
+
         map = new google.maps.Map(document.getElementById(div), {
             center: pyrmont,
             zoom: 14
@@ -91,14 +93,14 @@ function makeGoogleMap(i,lat, lon, div, near, radius){
         }, callback);
     }
 
-      function callback(results, status) {
+    function callback(results, status) {
         
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 createMarker(results[i]);
             }
         }
-     }
+    }
 
     function createMarker(place) {
         var placeLoc = place.geometry.location;
@@ -138,54 +140,65 @@ function getYouTubeVideo(q, div) {
 
 }
 
+function newDiv(addClass){
+
+  return $("<div>").addClass(addClass);
+
+}
+
+function newSpan(addClass){
+
+  return $("<span>").addClass(addClass);
+
+}
 
 function renderResult(i){
 
-  let row = $("<div>").addClass("row");
+  let row = newDiv("row");
 
 
-  let mapGoesHere      = $("<div>").addClass("embed-responsive embed-responsive-16by9")
+  let mapGoesHere      = newDiv("embed-responsive embed-responsive-16by9")
                                    .attr("id","map-" + i);
 
-  let mapCardTitle     = $("<span>").addClass("card-title")
+  let mapCardTitle     = newSpan("card-title")
                                     .attr("id","map-title-" + i)
                                     .text("Placeholder");
 
-  let mapCardContent   = $("<div>").addClass("card-content")
+  let mapCardContent   = newDiv("card-content")
                                    .append(mapCardTitle);
 
-  let mapCardImage     = $("<div>").addClass("card-image")
+  let mapCardImage     = newDiv("card-image")
                                    .append(mapGoesHere)
                                    .append(mapCardContent);
 
-  let mapCard          = $("<div>").addClass("card")
+  let mapCard          = newDiv("card")
                                    .append(mapCardImage);
 
-  let mapCol           = $("<div>").addClass("col-xs-4")
+  let mapCol           = newDiv("col-xs-4")
                                    .append(mapCard);
 
   row.append(mapCol);
 
 
 
-  let videoGoesHere    = $("<div>").addClass("embed-responsive embed-responsive-16by9")
+  let videoGoesHere    = newDiv("embed-responsive embed-responsive-16by9")
                                    .attr("id","video-" + i);
 
-  let videoCardTitle   = $("<span>").addClass("card-title")
+  let videoCardTitle   = newSpan("card-title")
                                     .attr("id","video-title-" + i)
                                     .text("Placeholder");
 
-  let videoCardContent = $("<div>").addClass("card-content")
+  let videoCardContent = newDiv("card-content")
                                    .append(videoCardTitle);
 
-  let videoCardImage   = $("<div>").addClass("card-image")
+  let videoCardImage   = newDiv("card-image")
                                    .append(videoGoesHere)
                                    .append(videoCardContent);
 
-  let videoCard        = $("<div>").addClass("card")
+  let videoCard        = newDiv("card")
                                    .append(videoCardImage);
 
-  let videoCol         = $("<div>").addClass("col-xs-4")
+  let videoCol         = newDiv("col-xs-4")
                                    .append(videoCard);
 
   row.append(videoCol);
