@@ -31,12 +31,6 @@ function getEvents(q,where,date,results) // We should pass more arguments based 
 
             //console.log(event.title);
             console.log(event);
-        
-            if(i==0){  
-
-              makeGoogleMap(event.latitude,event.longitude,"map","parking",1000);  
-
-            }
 
             if(event.performers === null){
               getYouTubeVideo(event.title, "video-" + i);
@@ -50,9 +44,12 @@ function getEvents(q,where,date,results) // We should pass more arguments based 
             // If the event has only one performer listed, it searches for that name
             else if (typeof(event.performers) === "object"){
 
-              getYouTubeVideo(event.performers.performer.name,"video-" + i);
+              getYouTubeVideo(i,event.performers.performer.name,"video-" + i);
             
             }
+
+            makeGoogleMap(i,event.latitude,event.longitude,"map-" + i,"parking",1000);  
+
 
         }
 
@@ -60,7 +57,7 @@ function getEvents(q,where,date,results) // We should pass more arguments based 
 
 }
 
-function makeGoogleMap(lat, lon, div, near, radius){
+function makeGoogleMap(i,lat, lon, div, near, radius){
 
     var map;
     var infowindow;
@@ -71,17 +68,18 @@ function makeGoogleMap(lat, lon, div, near, radius){
 
     /* Below from the Google Places API Documentation */
 
+    $("#map-title-" + i).text(near + " within " + radius + "M")
+
     function initMap() {
 
         console.log("init map");
         var pyrmont = {
             lat: parseFloat(lat),
             lng: parseFloat(lon)
-        };
-
+        };4
         map = new google.maps.Map(document.getElementById(div), {
             center: pyrmont,
-            zoom: 15
+            zoom: 14
         });
 
         infowindow = new google.maps.InfoWindow();
@@ -143,12 +141,38 @@ function getYouTubeVideo(q, div) {
 
 function renderResult(i){
 
+  let row = $("<div>").addClass("row");
+
+
+  let mapGoesHere      = $("<div>").addClass("embed-responsive embed-responsive-16by9")
+                                   .attr("id","map-" + i);
+
+  let mapCardTitle     = $("<span>").addClass("card-title")
+                                    .attr("id","map-title-" + i)
+                                    .text("Placeholder");
+
+  let mapCardContent   = $("<div>").addClass("card-content")
+                                   .append(mapCardTitle);
+
+  let mapCardImage     = $("<div>").addClass("card-image")
+                                   .append(mapGoesHere)
+                                   .append(mapCardContent);
+
+  let mapCard          = $("<div>").addClass("card")
+                                   .append(mapCardImage);
+
+  let mapCol           = $("<div>").addClass("col-xs-4")
+                                   .append(mapCard);
+
+  row.append(mapCol);
+
+
 
   let videoGoesHere    = $("<div>").addClass("embed-responsive embed-responsive-16by9")
                                    .attr("id","video-" + i);
 
   let videoCardTitle   = $("<span>").addClass("card-title")
-                                    .attr("id","card-title-" + i)
+                                    .attr("id","video-title-" + i)
                                     .text("Placeholder");
 
   let videoCardContent = $("<div>").addClass("card-content")
@@ -164,7 +188,9 @@ function renderResult(i){
   let videoCol         = $("<div>").addClass("col-xs-4")
                                    .append(videoCard);
 
-  videoCol.appendTo("#results");
+  row.append(videoCol);
+
+  $("#results").append(row);
 
 
 }
