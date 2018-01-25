@@ -164,7 +164,7 @@ function renderResult(i){
   let videoCol         = $("<div>").addClass("col-xs-4")
                                    .append(videoCard);
 
-  videoCol.appendTo("#video" + i);
+  videoCol.appendTo("#results");
 
 
 }
