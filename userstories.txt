@@ -1,5 +1,6 @@
 User Stories
 
+
 ------
 
 A user can see the most recent 5 searches 
@@ -8,3 +9,41 @@ A user can search for shows around a specific location and by genre (optional)
 
 The program returns a list of 10 shows, information on each of the artists, and a youtube video showing an example of their work
 
+
+-------
+
+A user is invited to a show by his hipster friend; he's never heard of the band. 
+He remembers the artist and the location of the show, but forgets the time. 
+
+He uses BC to search for the ARTIST, the tool returns information about the show, 
+confirming it's location and informing him about the time.
+
+Because he's never heard of band, he watches one of the videos. He's curious about more - (uses a 'more' button to access bunch of videos to fill him in on their songs?)
+
+Uses BC on laptop
+
+
+____
+
+A user is bored and looking for new music. 
+
+She'd love to see a show. She uses BC to search for upcoming shows nearby. 
+
+She knows one of the bands listed, but had never heard of the others. 
+
+She watches a number of videos - one show looks interesting (can she buy tickets?)
+
+Uses BC on iPad
+
+_____
+
+
+A user already has tickets to a show by a band he knows well. 
+
+He searches the band name on BC, which returns the show he's booked for. 
+
+He jumps right to the parking maps to strategize parking this evening.
+
+Uses BC on mobile
+
+_______
