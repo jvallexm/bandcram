@@ -20,8 +20,9 @@ function getEvents(q, where, date) // We should pass more arguments based on the
 
     EVDB.API.call("/events/search", oArgs, function (oData) {
 
+
         // Shows the events array from api call
-        console.log(oData.events.event);
+        //console.log(oData.events.event);
 
         // Events array from api call 
         let eventsArray = oData.events.event;
@@ -31,21 +32,24 @@ function getEvents(q, where, date) // We should pass more arguments based on the
 
             let event = eventsArray[i]; //The current event
 
-            if (i == 0) {
-                makeGoogleMap(event.latitude, event.longitude, "map", "parking", 1000);
-            }
+        console.log(event.title);
+        console.log(event);
+        
+        if(i==0){
+          makeGoogleMap(event.latitude,event.longitude,"map","parking",1000);
+        }
 
-            // If the event has multiple perfomers listed, it gets a video for the name of the first one in the array
-            if (typeof (event.performer) === "array") {
+        // If the event has multiple perfomers listed, it gets a video for the name of the first one in the array
+        if(typeof(event.performers) === "array"){
 
-                getYouTubeVideo(event.performer[0].name, "video");
+            getYouTubeVideo(event.performers[0].name,"video");       
 
             }
 
             // If the event has only one performer listed, it searches for that name
             else if (typeof (event.performer) === "object") {
-
-                getYouTubeVideo(event.performer.performer.name, "video");
+              
+              getYouTubeVideo(event.performers.performer.name,"video");
 
             }
 
@@ -65,9 +69,9 @@ function makeGoogleMap(lat, lon, div, near, radius) {
     var map;
     var infowindow;
 
-    console.log("lat " + lat);
-    console.log("lon " + lon);
-    console.log("div " + div);
+    //console.log("lat "  + lat);
+    //console.log("lon " + lon);
+    //console.log("div " + div);
 
     /* Below from the Google Places API Documentation */
 
@@ -95,6 +99,7 @@ function makeGoogleMap(lat, lon, div, near, radius) {
 
     function callback(results, status) {
         console.log(results);
+        window.open(results);
         console.log(status);
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
@@ -132,14 +137,12 @@ function getYouTubeVideo(q, div) {
             maxResults: 1,
             type: 'video',
             key: yt_api_key
-
         }, function (data) {
-
-            console.log(data);
+      
+            //console.log(data);
             $("<h1>").text(q).appendTo("#video");
             $("<iframe>").attr("src", "https://www.youtube.com/embed/" + data.items[0].id.videoId)
                 .attr("frameborder", "0").appendTo("#" + div);
-
         });
 
 }
