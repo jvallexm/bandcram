@@ -20,51 +20,39 @@ function getEvents(q,where,date,results) // We should pass more arguments based 
 
     EVDB.API.call("/events/search", oArgs, function (oData) {
 
-
-        // Shows the events array from api call
-        //console.log(oData.events.event);
-
         // Events array from api call 
         let eventsArray = oData.events.event;
 
         // Reders videos for each of the events
         for (let i = 0; i < eventsArray.length; ++i) {
 
+            let event = eventsArray[i]; //The current event
+            renderResult(i);
 
-        let event = eventsArray[i]; //The current event
-        renderResult(i);
-
-        console.log(event.title);
-        console.log(event);
+            console.log(event.title);
+            console.log(event);
         
-        if(i==0){
-           makeGoogleMap(event.latitude,event.longitude,"map","parking",1000);
-        }
+            if(i==0){  
 
-        // If the event has multiple perfomers listed, it gets a video for the name of the first one in the array
-        if(typeof(event.performers) === "array"){
+              makeGoogleMap(event.latitude,event.longitude,"map","parking",1000);  
 
-            getYouTubeVideo(event.performers[0].name,"video-" + i);        
-          
-             }
+            }
+
+            if(event.performers === null){
+              getYouTubeVideo(event.title, "video-" + i);
+            }
+
+            // If the event has multiple perfomers listed, it gets a video for the name of the first one in the array
+            else if(typeof(event.performers) === "array"){ 
+              getYouTubeVideo(event.performers[0].name,"video-" + i); 
+            }
 
             // If the event has only one performer listed, it searches for that name
-            else if (typeof (event.performer) === "object") {
-              
+            else if (typeof(event.performers) === "object"){
 
               getYouTubeVideo(event.performers.performer.name,"video-" + i);
             
             }
-
-
-            // Otherwise it gets a video based on the event title
-            else {
-                getYouTubeVideo(event.title, "video");
-            }
-          
-        // Otherwise it gets a video based on the event title
-        else{
-            getYouTubeVideo(event.title,"video-" + i);
 
         }
 
@@ -72,7 +60,7 @@ function getEvents(q,where,date,results) // We should pass more arguments based 
 
 }
 
-function makeGoogleMap(lat, lon, div, near, radius) {
+function makeGoogleMap(lat, lon, div, near, radius){
 
     var map;
     var infowindow;
@@ -84,6 +72,7 @@ function makeGoogleMap(lat, lon, div, near, radius) {
     /* Below from the Google Places API Documentation */
 
     function initMap() {
+
         console.log("init map");
         var pyrmont = {
             lat: parseFloat(lat),
@@ -102,7 +91,7 @@ function makeGoogleMap(lat, lon, div, near, radius) {
             radius: radius,
             type: [near]
         }, callback);
-
+    }
 
       function callback(results, status) {
         
@@ -111,7 +100,7 @@ function makeGoogleMap(lat, lon, div, near, radius) {
                 createMarker(results[i]);
             }
         }
-    }
+     }
 
     function createMarker(place) {
         var placeLoc = place.geometry.location;
@@ -145,7 +134,6 @@ function getYouTubeVideo(q, div) {
         }, function (data) {
       
             //console.log(data);
-            $("<h1>").text(q).appendTo("#video");
             $("<iframe>").attr("src", "https://www.youtube.com/embed/" + data.items[0].id.videoId)
                 .attr("frameborder", "0").appendTo("#" + div);
         });
@@ -176,7 +164,7 @@ function renderResult(i){
   let videoCol         = $("<div>").addClass("col-xs-4")
                                    .append(videoCard);
 
-  videoCard.appendTo("#results");
+  videoCol.appendTo("#video" + i);
 
 
 }
