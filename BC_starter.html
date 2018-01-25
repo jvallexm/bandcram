@@ -39,14 +39,28 @@
           </ul>
         </div>-->
             <div class="nav navbar-nav navbar-right">
-                <form class="navbar-form" role="search">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search" name="q">
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="band-location-input">Band or Location:</label>
+                            <input type="text" class="form-control" id="band-location-input" placeholder="i.e. TacoCat or Boston">
+                            <!-- Single button -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select One:
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#">Restaurants Nearby</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Parking Nearby</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                        <button type="submit" class="btn btn-default">Cram for Bands!</button>
+                    </form>
             </div>
         </div>
     </nav>
