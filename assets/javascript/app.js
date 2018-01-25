@@ -55,7 +55,7 @@ function getEvents(q,where,date,results,near) // Gets events from the Eventful A
 
             // Renders a Google Map based on the search and index i, the latitude and longitude of the event location
             // The near parameter and 1000 meters 
-            makeGoogleMap(i,event.latitude,event.longitude,"map-" + i, near, 1000);  
+            getGoogleMap(i,event.latitude,event.longitude,"map-" + i, near, 1000);  
 
 
         }
@@ -66,7 +66,7 @@ function getEvents(q,where,date,results,near) // Gets events from the Eventful A
 
 // Renders a Google Map
 
-function makeGoogleMap(i,lat, lon, div, near, radius){
+function getGoogleMap(i,lat, lon, div, near, radius){
 
     // Renders the card title for the map
     $("#map-title-" + i).text(near + " within " + radius + "M");
@@ -78,7 +78,7 @@ function makeGoogleMap(i,lat, lon, div, near, radius){
 
     function initMap() {
 
-        console.log("init map");
+        //console.log("init map");
 
         var pyrmont = {
             lat: parseFloat(lat),
@@ -143,17 +143,22 @@ function getYouTubeVideo(q,i) {
             //console.log("searched for " + q);
             //console.log(data);
 
-            // Adds a video title 
+            // If the total results are 0, appends a gif of TV static, otherwise it appends the video
 
-            $("#video-title-" + i).text("Watch"); 
+            if(data.pageInfo.totalResults === 0){ 
 
-            // If no data static
+              $("#video-title-" + i).text("Not Found"); 
+              $("<img>").attr("src","assets/images/static.gif")
+                        .appendTo("#video-" + i);
 
-            // else
+            }
+            else{
 
-            $("<iframe>").attr("src", "https://www.youtube.com/embed/" + data.items[0].id.videoId)
-                         .attr("frameborder", "0").appendTo("#video-" + i);
+              $("#video-title-" + i).text("Watch"); 
+              $("<iframe>").attr("src", "https://www.youtube.com/embed/" + data.items[0].id.videoId)
+                           .attr("frameborder", "0").appendTo("#video-" + i);
 
+            }
         });
 
 }
