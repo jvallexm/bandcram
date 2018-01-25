@@ -29,7 +29,7 @@ function getEvents(q,where,date,results) // We should pass more arguments based 
             let event = eventsArray[i]; //The current event
             renderResult(i);
 
-            console.log(event.title);
+            //console.log(event.title);
             console.log(event);
 
             if(event.performers === null){
