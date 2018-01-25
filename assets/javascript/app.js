@@ -22,7 +22,7 @@ function getEvents(q,where,date) // We should pass more arguments based on the u
    EVDB.API.call("/events/search", oArgs, function(oData) {
 
       // Shows the events array from api call
-      console.log(oData.events.event);
+      //console.log(oData.events.event);
 
       // Events array from api call 
       let eventsArray = oData.events.event;
@@ -32,21 +32,24 @@ function getEvents(q,where,date) // We should pass more arguments based on the u
 
         let event = eventsArray[i]; //The current event
 
+        console.log(event.title);
+        console.log(event);
+        
         if(i==0){
           makeGoogleMap(event.latitude,event.longitude,"map","parking",1000);
         }
 
         // If the event has multiple perfomers listed, it gets a video for the name of the first one in the array
-        if(typeof(event.performer) === "array"){
+        if(typeof(event.performers) === "array"){
 
-            getYouTubeVideo(event.performer[0].name,"video");        
+            getYouTubeVideo(event.performers[0].name,"video");        
 
         }
 
         // If the event has only one performer listed, it searches for that name
         else if(typeof(event.performer) === "object"){
 
-            getYouTubeVideo(event.performer.performer.name,"video");
+            getYouTubeVideo(event.performers.performer.name,"video");
 
         }
 
@@ -94,6 +97,7 @@ function makeGoogleMap(lat,lon,div,near,radius){
 
       function callback(results, status) {
         console.log(results);
+        window.open(results);
         console.log(status);
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           for (var i = 0; i < results.length; i++) {
@@ -124,8 +128,9 @@ function makeGoogleMap(lat,lon,div,near,radius){
 
 function getYouTubeVideo(q,div){
 
-    $.get(`https://www.googleapis.com/youtube/v3/search`, 
-    	  {		
+    $.get(`https://www.googleapis.com/youtube/v3/search`,
+
+    	   {		
               part: 'snippet, id',
               q: q,
               maxResults: 1,
