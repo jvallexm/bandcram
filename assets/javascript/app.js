@@ -31,21 +31,23 @@ function getEvents(q,where,date,results) // We should pass more arguments based 
 
             //console.log(event.title);
             console.log(event);
-
+            console.log(event.performers);
             if(event.performers === null){
               getYouTubeVideo(event.title, "video-" + i);
             }
 
             // If the event has multiple perfomers listed, it gets a video for the name of the first one in the array
             else if(typeof(event.performers) === "array"){ 
-              getYouTubeVideo(event.performers[0].name,"video-" + i); 
+              getYouTubeVideo(event.performers[i].name,"video-" + i); 
             }
 
             // If the event has only one performer listed, it searches for that name
             else if (typeof(event.performers) === "object"){
 
-              getYouTubeVideo(i,event.performers.performer.name,"video-" + i);
+              getYouTubeVideo(event.performers.performer.name,"video-" + i);
             
+            } else {
+              getYouTubeVideo(event.title, "video-" + i);
             }
 
             makeGoogleMap(i,event.latitude,event.longitude,"map-" + i,"parking",1000);  
@@ -68,7 +70,7 @@ function makeGoogleMap(i,lat, lon, div, near, radius){
 
     /* Below from the Google Places API Documentation */
 
-    $("#map-title-" + i).text(near + " within " + radius + "M")
+    $("#map-title-" + i).text(near + " within " + radius + "M");
 
     function initMap() {
 
@@ -132,8 +134,8 @@ function getYouTubeVideo(q, div) {
             type: 'video',
             key: yt_api_key
         }, function (data) {
-      
-            //console.log(data);
+            console.log("searched for " + q);
+            console.log(data);
             $("<iframe>").attr("src", "https://www.youtube.com/embed/" + data.items[0].id.videoId)
                 .attr("frameborder", "0").appendTo("#" + div);
         });
