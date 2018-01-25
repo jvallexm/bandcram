@@ -69,9 +69,9 @@ function makeGoogleMap(lat,lon,div,near,radius){
       var map;
       var infowindow;
 
-      console.log("lat "  + lat);
-      console.log("lon " + lon);
-      console.log("div " + div);
+      //console.log("lat "  + lat);
+      //console.log("lon " + lon);
+      //console.log("div " + div);
 
       /* Below from the Google Places API Documentation */
 
@@ -139,7 +139,7 @@ function getYouTubeVideo(q,div){
 
           },function(data){
 
-          	  console.log(data);
+          	  //console.log(data);
               $("<h1>").text(q).appendTo("#video");
               $("<iframe>").attr("src", "https://www.youtube.com/embed/" + data.items[0].id.videoId)
              			   .attr("frameborder","0").appendTo("#" + div); 
