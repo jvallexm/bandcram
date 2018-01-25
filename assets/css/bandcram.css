@@ -1,6 +1,6 @@
 
 body {
-  padding-top: 5rem;
+  padding-top: 7rem;
 }
 
 .starter-template {
@@ -42,7 +42,7 @@ a.navbar-brand {
 }
 
 .card .card-content .card-title, .card-reveal .card-title{
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 200;    
 }
 
