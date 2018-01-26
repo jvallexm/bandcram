@@ -26,10 +26,10 @@ function getEvents(q,where,date,results,near) // Gets events from the Eventful A
 
             // Let's get the time and date, the format is YYYY-MM-DD HH:MM:SS
 
-            renderResult(i,event.title,`${event.venue_address} ${event.city_name}, ${event.region_abbr}` ); // Creates a new panel for each of the returned events
+            renderResult(i,event.title,`${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code}` ); // Creates a new panel for each of the returned events
 
             // console.log(event.title);        // Event Title
-            // console.log(event);              // Event Object
+             console.log(event);              // Event Object
             // console.log(event.performers);   // Event performers
 
             let search;  // Variable for YouTube Search
