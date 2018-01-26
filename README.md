@@ -18,4 +18,4 @@ An app that give you quick at a glance information on local shows.
 * [David Coulombe](https://github.com/DaveyStacks)
 * [Peter Johnstone](https://github.com/p2bilt) (http://p2bilt.com)
 * [Ziad Siddique](https://github.com/zssiddique)
-* [Jennifer Valle](https://github.com/jvallexm) (https://jennifer-valle.com)
+* [Jennifer Valle](https://github.com/jvallexm) (http://jennifer-valle.com)
