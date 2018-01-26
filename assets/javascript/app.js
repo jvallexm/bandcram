@@ -1,9 +1,5 @@
 
 
-const eventful_api_key = `G6bFxWDSpqCDTwjr`;                           // Eventful API Key
-const yt_api_key = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`;          // YouTube API Key
-const google_places_key = `AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E`;   // Google Places API Key
-
 function getEvents(q,where,date,results,near) // Gets events from the Eventful API
 {
 
@@ -28,10 +24,12 @@ function getEvents(q,where,date,results,near) // Gets events from the Eventful A
 
             let event = eventsArray[i]; //The current event
 
-            renderResult(i,event.title,event.venue_address); // Creates a new panel for each of the returned events
+            // Let's get the time and date, the format is YYYY-MM-DD HH:MM:SS
+
+            renderResult(i,event.title,`${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code}` ); // Creates a new panel for each of the returned events
 
             // console.log(event.title);        // Event Title
-            // console.log(event);              // Event Object
+             console.log(event);              // Event Object
             // console.log(event.performers);   // Event performers
 
             let search;  // Variable for YouTube Search
@@ -69,7 +67,7 @@ function getEvents(q,where,date,results,near) // Gets events from the Eventful A
 function getGoogleMap(i,lat, lon, div, near, radius){
 
     // Renders the card title for the map
-    $("#map-title-" + i).text(near + " within " + radius + "M");
+    $("#map-title-" + i).text(`${near} within ${radius}M`);
 
     /* Below from the Google Places API Documentation */
 
