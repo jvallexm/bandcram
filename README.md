@@ -1,5 +1,5 @@
 
-![BandCram Logo](assets/images/BandCram_Logo.png)
+![BandCram Logo](assets/images/BandCram_Logo_blk.png)
 
 # BandCram
 
@@ -16,6 +16,6 @@ An app that give you quick at a glance information on local shows.
 ## Authors
 
 * [David Coulombe](https://github.com/DaveyStacks)
-* [Peter Johnstone](https://github.com/p2bilt)
+* [Peter Johnstone](https://github.com/p2bilt)(http://p2bilt.com)
 * [Ziad Siddique](https://github.com/zssiddique)
 * [Jennifer Valle](https://github.com/jvallexm)
