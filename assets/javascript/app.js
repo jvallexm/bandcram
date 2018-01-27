@@ -346,7 +346,7 @@ $(document).ready(function(){
         let whenSearch = $("#input-date-" + thisForm).val().trim();
         let nearbySearch = $("#input-nearby-venue-" + thisForm).val().trim();
         let resultsSearch = $("#input-results-" + thisForm).val().trim();
-        console.log("ding")
+        console.log(`Artist ${artistSearch} Location ${locationSearch} when ${whenSearch} nearby ${nearbySearch} results ${resultsSearch}`);
 
     });
     //getEvents("comedy","St Louis","February",10,"parking");
