@@ -199,6 +199,7 @@ function getYouTubeVideo(q, i) {
             else {
 
                 let link = $("<a>").attr("href","https://www.youtube.com/results?search_query=" + q).text("Watch More →");
+                $("#video-title-" + i).empty();
                 $("#video-title-" + i).append(link);
                 $("<iframe>").attr("src", "https://www.youtube.com/embed/" + data.items[0].id.videoId)
                     .attr("frameborder", "0").appendTo("#video-" + i);
