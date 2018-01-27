@@ -25,10 +25,15 @@ function getEvents(q,where,date,results,near) // Gets events from the Eventful A
         for (let i = 0; i < eventsArray.length; ++i) {
 
             let event = eventsArray[i]; //The current event
-
+            
+            let eventTime = oData.events.event[i].start_time
+            console.log(eventTime);
+           let eventTimeFormat = moment(eventTime).format("dddd, MMMM Do YYYY, h:mm a");
+           console.log(eventTimeFormat);
+            // console.log(moment())
             // Let's get the time and date, the format is YYYY-MM-DD HH:MM:SS
 
-            renderResult(i,event.title,`${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code}` ); // Creates a new panel for each of the returned events
+            renderResult(i,event.title,`${eventTimeFormat} ${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code}` ); // Creates a new panel for each of the returned events
 
             // console.log(event.title);        // Event Title
              console.log(event);              // Event Object
