@@ -45,15 +45,10 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
             if (event.performers === null)
                 search = event.title;
-
-            else if (typeof (event.performers) === "array")
-                search = event.performers[0].name;
-
-            else if (typeof (event.performers) === "object")
-                search = event.performers.performer.name;
-
+            else if (event.performers.performer[0] !== undefined)
+                     search = event.performers.performer[0].name;
             else
-                search = event.title;
+                    search = event.performers.performer.name;
 
             // Renders a YouTube video based on the search and index i 
             getYouTubeVideo(search, i);
@@ -89,17 +84,14 @@ function getEventById(id,i,header) // Gets events from the Eventful API
         let displayTime = timeFormat(eventTime);
         renderResult(i, event.title, `${displayTime} ${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code}`);
         let search;
+
         if (event.performers === null)
             search = event.title;
-
-        else if (typeof (event.performers) === "array")
-            search = event.performers[0].name;
-
-        else if (typeof (event.performers) === "object")
-            search = event.performers.performer.name;
-
+        else if (event.performers.performer[0] !== undefined)
+            search = event.performers.performer[0].name;
         else
-            search = event.title;
+            search = event.performers.performer.name;
+        
         getYouTubeVideo(search, i);
         getGoogleMap(i, event.latitude, event.longitude, "map-" + i, "Parking", 1000);
 
