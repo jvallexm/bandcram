@@ -142,3 +142,16 @@ table td {
     border-color: #cd70ad;
     color: #000;
 }
+
+.white-label {
+    color: #ddd;
+}
+
+.grey-box {
+    background-color: #f5f5f5;
+}
+
+input, textarea{
+    background-color:#f5f5f5;
+    color: #FFF;
+}

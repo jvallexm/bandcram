@@ -23,36 +23,63 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+               <!--  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>
+                </button> -->
                 <a class="navbar-brand" href="#"> <img src="assets/images/BandCram_Logo.png" height="62" alt="BandCram"> </a>
             </div>
-            <!--         <div id="navbar" class="collapse navbar-collapse">
+<!--                      <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
-        </div>-->
-            <div class="nav navbar-nav navbar-right">
-                    <form class="form-inline">
-                        <div class="form-group">
-                            <label for="band-location-input">Band or Location:</label>
-                            <input type="text" class="form-control" id="band-location-input" placeholder="i.e. TacoCat or Boston">
-                            <!-- Single button -->
-                            <div class="btn-group">
-                                <select class="btn btn-default">
-                                    <option value="Restaurants">Restaurants Nearby</option>
-                                    <option value="Parking">Parking Nearby</option>
-                                  </select>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-default">Cram for Bands!</button>
-                    </form>
+        </div> -->
+            <div class="nav navbar-nav navbar-right" id="navbar-cramform">
+
+                                    <form>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label class="white-label" for="inputArtist">Artist</label>
+                                                <input type="text" class="form-control" id="inputArtist" placeholder="Artist">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="white-label" for="inputLocation">Location</label>
+                                                <input type="text" class="form-control" id="inputLocation" placeholder="Near Me" value="Near Me">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="white-label" for="inputDate">When</label>
+                                                <select class="form-control" id="inputDate">
+                                                    <option>This Week</option>
+                                                    <option>Next Week</option>
+                                                    <option>This Month</option>
+                                                    <option>Next Month</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="white-label" for="inputNearbyVenue">Show Nearby...</label>
+                                                <select class="form-control" id="inputNearbyVenue">
+                                                    <option>Parking</option>
+                                                    <option>Restaurants</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-1">
+                                                <label class="white-label" for="inputResults">Results</label>
+                                                <select class="form-control" id="inputResults">
+                                                    <option>10</option>
+                                                    <option>15</option>
+                                                    <option>20</option>
+                                                    <option>30</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-1">
+                                                <button type="submit" class="btn btn-success pull-right">GO</button>
+                                            </div>
+                                        </div>
+                                    </form>
             </div>
         </div>
     </nav>
