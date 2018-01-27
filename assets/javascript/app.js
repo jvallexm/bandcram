@@ -340,14 +340,28 @@ const ourPicks = [
 
 $(document).ready(function(){
 
+    let myLat;
+    let myLon;
+
+    if(navigator.geolocation) 
+    { 
+        navigator.geolocation.getCurrentPosition(function(position){
+
+                    myLat = position.coords.latitude;
+                    myLon = position.coords.longitude;
+        });  
+    }
+
     $("#user-search-1, #user-search-2").submit(function( event ) {
         event.preventDefault();
         let thisForm = this.id.split("-")[2];
-        let artistSearch = $("#input-artist-" + thisForm).val().trim();
+
+        let artistSearch   = $("#input-artist-" + thisForm).val().trim();
         let locationSearch = $("#input-location-" + thisForm).val().trim();
-        let whenSearch = $("#input-date-" + thisForm).val().trim();
-        let nearbySearch = $("#input-nearby-venue-" + thisForm).val().trim();
-        let resultsSearch = $("#input-results-" + thisForm).val().trim();
+        let whenSearch     = $("#input-date-" + thisForm).val().trim();
+        let nearbySearch   = $("#input-nearby-venue-" + thisForm).val().trim();
+        let resultsSearch  = $("#input-results-" + thisForm).val().trim();
+
         console.log(`Artist ${artistSearch} Location ${locationSearch} when ${whenSearch} nearby ${nearbySearch} results ${resultsSearch}`);
 
     });
