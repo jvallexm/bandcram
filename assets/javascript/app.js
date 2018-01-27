@@ -85,7 +85,7 @@ function getEventById(id,i) // Gets events from the Eventful API
         // Events array from api call 
   
         console.log(event);
-        renderResult(i,event.title,`${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code}` );
+        renderResult(i,event.title,`${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code}` );
         let search;
         if(event.performers === null)
                search = event.title;
