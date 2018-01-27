@@ -27,7 +27,9 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
             let event = eventsArray[i]; //The current event
 
             let eventTime = event.start_time;
+
             let displayTime = timeFormat(eventTime);
+
             // console.log(moment())
             // Let's get the time and date, the format is YYYY-MM-DD HH:MM:SS
 
@@ -67,7 +69,7 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
 }
 
-function getEventById(id, i) // Gets events from the Eventful API
+function getEventById(id,i,header) // Gets events from the Eventful API
 {
 
     // API Query parameters
@@ -260,13 +262,18 @@ function createCol(element, i) {
 
 }
 
-function renderResult(i, title, desc) {
+function renderResult(i,title,desc,header){
 
     // The panel for each element in the search list
     let panel = newDiv("panel-body");
 
-    // The title of the panel
-    let panelTitle = $("<h1>").text(title);
+  if(header !== undefined){
+    let panelHeader = newDiv("panel-title").text(header);
+    panel.append(panelHeader);
+  }
+
+  // The title of the panel
+  let panelTitle = $("<h1>").text(title);
 
     // The subtitle of the panel
     let panelDesc = $("<p>").text(desc);
@@ -305,15 +312,42 @@ function renderResult(i, title, desc) {
 
 }
 
+
 function timeFormat(eventTime) {
     let eventTimeFormat = moment(eventTime).format("dddd, MMMM Do YYYY, h:mm a");
     return eventTimeFormat;
 }
 $(document).ready(function () {
 
+const ourPicks = [
+
+  { 
+    name: "David's Pick",
+    id: "E0-001-106661781-3"
+  },{
+    name: "Peter's Pick",
+    id: "E0-001-109109643-8"
+  },{
+    name: "Ziad's Pick",
+    id: "E0-001-106273043-5"
+  },{
+    name: "Jen's Pick",
+    id: "E0-001-109918478-4"
+  }
+
+];
+
+$(document).ready(function(){
+
+
     //getEvents("comedy","St Louis","February",10,"parking");
 
-    getEventById("E0-001-106661781-3", 0);
+
+    //getEventById("E0-001-106661781-3", 0);
     getEvents("concert", "Durham", "February", 10, "parking");
+
+  //for(let i=0; i<ourPicks.length; ++i){
+  //  getEventById(ourPicks[i].id,i,ourPicks[i].name);
+  //}
 
 });
