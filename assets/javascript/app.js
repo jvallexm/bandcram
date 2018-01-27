@@ -26,17 +26,17 @@ function getEvents(q,where,date,results,near) // Gets events from the Eventful A
 
             let event = eventsArray[i]; //The current event
             
-            let eventTime = oData.events.event[i].start_time
+            let eventTime = event.start_time;
             console.log(eventTime);
-           let eventTimeFormat = moment(eventTime).format("dddd, MMMM Do YYYY, h:mm a");
-           console.log(eventTimeFormat);
+            let eventTimeFormat = moment(eventTime).format("dddd, MMMM Do YYYY, h:mm a");
+            console.log(eventTimeFormat);
             // console.log(moment())
             // Let's get the time and date, the format is YYYY-MM-DD HH:MM:SS
 
             renderResult(i,event.title,`${eventTimeFormat} ${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code}` ); // Creates a new panel for each of the returned events
 
             // console.log(event.title);        // Event Title
-             console.log(event);              // Event Object
+            console.log(event);              // Event Object
             // console.log(event.performers);   // Event performers
 
             let search;  // Variable for YouTube Search
@@ -68,6 +68,43 @@ function getEvents(q,where,date,results,near) // Gets events from the Eventful A
     });
 
 }
+
+function getEventById(id,i) // Gets events from the Eventful API
+{
+
+    // API Query parameters
+    var oArgs = {
+      
+      app_key: eventful_api_key,
+      id: id, 
+      
+    };
+
+    EVDB.API.call("/events/get", oArgs, function (event) {
+
+        // Events array from api call 
+  
+        console.log(event);
+        renderResult(i,event.title,`${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code}` );
+        let search;
+        if(event.performers === null)
+               search = event.title;
+
+        else if(typeof(event.performers) === "array")
+               search = event.performers[0].name;
+
+        else if(typeof(event.performers) === "object")
+               search = event.performers.performer.name;
+
+        else
+               search = event.title;
+        getYouTubeVideo(search,i);
+        getGoogleMap(i,event.latitude,event.longitude,"map-" + i, "Parking", 1000);  
+
+    });
+
+}
+
 
 // Renders a Google Map
 
@@ -270,11 +307,8 @@ function renderResult(i,title,desc){
 
 $(document).ready(function(){
 
-  getEvents("comedy","St Louis","February",10,"parking");
+  //getEvents("comedy","St Louis","February",10,"parking");
+
+  getEventById("E0-001-106661781-3",0);
 
 });
-
-
-// Renders all three things at once when data has been returned
-
-// Form submit
