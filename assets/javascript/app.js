@@ -46,9 +46,9 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
             if (event.performers === null)
                 search = event.title;
             else if (event.performers.performer[0] !== undefined)
-                     search = event.performers.performer[0].name;
+                search = event.performers.performer[0].name;
             else
-                    search = event.performers.performer.name;
+                search = event.performers.performer.name;
 
             // Renders a YouTube video based on the search and index i 
             getYouTubeVideo(search, i);
@@ -190,7 +190,9 @@ function getYouTubeVideo(q, i) {
             }
             else {
 
-                let link = $("<a>").attr("href","https://www.youtube.com/results?search_query=" + q).text("Watch More →");
+                let link = $("<a>").attr("href","https://www.youtube.com/results?search_query=" + q)
+                                   .attr("target","_blank")
+                                   .text("Watch More →");
                 $("#video-title-" + i).empty();
                 $("#video-title-" + i).append(link);
                 $("<iframe>").attr("src", "https://www.youtube.com/embed/" + data.items[0].id.videoId)
@@ -363,7 +365,7 @@ $(document).ready(function(){
 
 
     //getEventById("E0-001-106661781-3", 0);
-    getEvents("concert", "Durham", "February", 10, "parking");
+    getEvents("comedy", "washington", "February", 30, "parking");
 
     //for(let i=0; i<ourPicks.length; ++i){
     //  getEventById(ourPicks[i].id,i,ourPicks[i].name);
