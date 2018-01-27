@@ -339,20 +339,16 @@ const ourPicks = [
 $(document).ready(function(){
 
     $("#user-search-1, #user-search-2").submit(function( event ) {
-        alert( "Handler for .submit() called." );
-        let artistSearch = $("#inputArtist1").val().trim();
-        let locationSearch = $("#inputLocation1").val().trim();
-        let whenSearch = $("#inputDate1").val().trim();
-        let nearbySearch = $("#inputNearbyVenue1").val().trim();
-        let resultsSearch = $("#inputResults1").val().trim();
-        let artistSearch2 = $("#inputArtist2").val().trim();
-        let locationSearch2 = $("#inputLocation2").val().trim();
-        let whenSearch2 = $("#inputDate2").val().trim();
-        let nearbySearch2 = $("#inputNearbyVenue2").val().trim();
-        let resultsSearch2 = $("#inputResults2").val().trim();
-        
         event.preventDefault();
-      });
+        let thisForm = this.id.split("-")[2];
+        let artistSearch = $("#input-artist-" + thisForm).val().trim();
+        let locationSearch = $("#input-location-" + thisForm).val().trim();
+        let whenSearch = $("#input-date-" + thisForm).val().trim();
+        let nearbySearch = $("#input-nearby-venue-" + thisForm).val().trim();
+        let resultsSearch = $("#input-results-" + thisForm).val().trim();
+        console.log("ding")
+
+    });
     //getEvents("comedy","St Louis","February",10,"parking");
 
 
