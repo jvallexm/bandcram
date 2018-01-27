@@ -36,19 +36,24 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
             renderResult(i, event.title, `${displayTime} ${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code}`); // Creates a new panel for each of the returned events
 
             // console.log(event.title);        // Event Title
-            // console.log(event);              // Event Object
-            // console.log(event.performers.performer[0]);   // Event performers
+            console.log(event);              // Event Object
+            // console.log(event.performers);   // Event performers
 
             let search;  // Variable for YouTube Search
 
             // Sets the search variable based on the event data returned
 
             if (event.performers === null)
-                    search = event.title;
-            else if (event.performers.performer[0] !== undefined)
-                    search = event.performers.performer[0].name;
+                search = event.title;
+
+            else if (typeof (event.performers) === "array")
+                search = event.performers[0].name;
+
+            else if (typeof (event.performers) === "object")
+                search = event.performers.performer.name;
+
             else
-                    search = event.performers.performer.name;
+                search = event.title;
 
             // Renders a YouTube video based on the search and index i 
             getYouTubeVideo(search, i);
@@ -86,10 +91,15 @@ function getEventById(id,i,header) // Gets events from the Eventful API
         let search;
         if (event.performers === null)
             search = event.title;
-        else if (event.performers.performer[0] !== undefined)
-            search = event.performers.performer[0].name;
-        else
+
+        else if (typeof (event.performers) === "array")
+            search = event.performers[0].name;
+
+        else if (typeof (event.performers) === "object")
             search = event.performers.performer.name;
+
+        else
+            search = event.title;
         getYouTubeVideo(search, i);
         getGoogleMap(i, event.latitude, event.longitude, "map-" + i, "Parking", 1000);
 
@@ -340,7 +350,9 @@ $(document).ready(function(){
         let whenSearch2 = $("#inputDate2").val().trim();
         let nearbySearch2 = $("#inputNearbyVenue2").val().trim();
         let resultsSearch2 = $("#inputResults2").val().trim();
-
+        
+        event.preventDefault();
+      });
     //getEvents("comedy","St Louis","February",10,"parking");
 
 
