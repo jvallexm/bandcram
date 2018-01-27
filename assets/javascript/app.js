@@ -338,6 +338,18 @@ const ourPicks = [
 
 $(document).ready(function(){
 
+    $("#user-search-1, #user-search-2").submit(function( event ) {
+        alert( "Handler for .submit() called." );
+        let artistSearch = $("#inputArtist1").val().trim();
+        let locationSearch = $("#inputLocation1").val().trim();
+        let whenSearch = $("#inputDate1").val().trim();
+        let nearbySearch = $("#inputNearbyVenue1").val().trim();
+        let resultsSearch = $("#inputResults1").val().trim();
+        let artistSearch2 = $("#inputArtist2").val().trim();
+        let locationSearch2 = $("#inputLocation2").val().trim();
+        let whenSearch2 = $("#inputDate2").val().trim();
+        let nearbySearch2 = $("#inputNearbyVenue2").val().trim();
+        let resultsSearch2 = $("#inputResults2").val().trim();
 
     //getEvents("comedy","St Louis","February",10,"parking");
 
