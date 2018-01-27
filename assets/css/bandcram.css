@@ -1,13 +1,12 @@
 
 body {
-  padding-top: 7rem;
+  padding-top: 10rem;
 }
 
-.starter-template {
+/*.starter-template {
   padding: 3rem 1.5rem;
-/*  text-align: center;*/
 }
-
+*/
 .navbar {
     min-height: 80px;
 }
@@ -90,12 +89,12 @@ a.navbar-brand {
     font-size:18px;
 }
 
-.first-search-row{
+/*.first-search-row{
     margin-bottom: 30px;
-}
+}*/
 
 .concert-back{
-    background-image: url("file://localhost/Users/peterjohnstone/codebase/repos/BANDCRAM-group-project-1/group-project-1/assets/images/placeholder_concert.jpg");
+    background-image: url("../images/placeholder_concert.jpg");
     background-size: cover;
 
 }
@@ -104,10 +103,15 @@ a.navbar-brand {
         padding: 0 15px;
 }
 
-.search-artist, .search-location, .btn-primary {
+
+.form-group > .btn {
+    margin-top: 25px;
+}
+
+/*.search-artist, .search-location, .btn-primary {
             margin: 15px 15px 0 15px;
 
-}
+}*/
 
 .embed-responsive {
     background-color: #f5f5f5;
@@ -119,4 +123,22 @@ hr {
 
 h1{
     margin-top: 0;
+}
+
+.table {
+    margin: 10px;
+}
+
+table td {
+    border-top: none !important;
+}
+
+.navbar-right{
+    margin-top: 15px;
+}
+
+.btn-success {
+    background-color: #cd70ad;
+    border-color: #cd70ad;
+    color: #000;
 }
