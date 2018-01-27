@@ -1,85 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="assets/images/favicon.ico">
-    <title>Behold BandCram</title>
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <!-- Custom styles for this template -->
-    <link href="assets/css/bandcram.css" rel="stylesheet">
-    <!--  API helper for eventful -->
-    <script type="text/javascript" src="http://api.eventful.com/js/api"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-</head>
+<head>     <meta charset="utf-8">     <meta http-equiv="X-UA-Compatible"
+content="IE=edge">     <meta name="viewport" content="width=device-width,
+initial-scale=1">     <!-- The above 3 meta tags *must* come first in the
+head; any other head content must come *after* these tags -->     <meta
+name="description" content="">     <meta name="author" content="">     <link
+rel="icon" href="assets/images/favicon.ico">     <title>Behold
+BandCram</title>     <!-- Bootstrap core CSS -->     <link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" i
+ntegrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmk
+zs7" crossorigin="anonymous">     <!-- Custom styles for this template -->
+<link href="assets/css/bandcram.css" rel="stylesheet">     <!--  API helper
+for eventful -->     <script type="text/javascript"
+src="http://api.eventful.com/js/api"></script>     <link
+href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-
+awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQN
+HSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> </head>
 
 <body>
+
+    <!-- Navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
+
         <div class="container">
+
+            <!-- Logo -->
             <div class="navbar-header">
-               <!--  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button> -->
                 <a class="navbar-brand" href="#"> <img src="assets/images/BandCram_Logo.png" height="62" alt="BandCram"> </a>
             </div>
-<!--                      <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div> -->
+
+            <!-- Navbar form -->
             <div class="nav navbar-nav navbar-right" id="navbar-cramform">
 
-                                    <form id="user-search-1">
-                                        <div class="form-row">
-                                            <div class="form-group col-md-4">
-                                                <label class="white-label" for="inputArtist">Artist</label>
-                                                <input type="text" class="form-control" id="inputArtist1" placeholder="Artist">
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                                <label class="white-label" for="inputLocation">Location</label>
-                                                <input type="text" class="form-control" id="inputLocation1" placeholder="Near Me" value="Near Me">
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                                <label class="white-label" for="inputDate">When</label>
-                                                <select class="form-control" id="inputDate1">
-                                                    <option value="1">This Week</option>
-                                                    <option value="2">Next Week</option>
-                                                    <option value="3">This Month</option>
-                                                    <option value="4">Next Month</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                                <label class="white-label" for="inputNearbyVenue">Show Nearby...</label>
-                                                <select class="form-control" id="inputNearbyVenue1">
-                                                    <option value="1">Parking</option>
-                                                    <option value="2">Restaurants</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-md-1">
-                                                <label class="white-label" for="inputResults">Results</label>
-                                                <select class="form-control" id="inputResults1">
-                                                    <option value="10">10</option>
-                                                    <option value="15">15</option>
-                                                    <option value="20">20</option>
-                                                    <option value="30">30</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-md-1">
-                                                <button type="submit" class="btn btn-success pull-right">GO</button>
-                                            </div>
-                                        </div>
-                                    </form>
+                <form id="user-search-1" no="1">
+                    <div class="form-row">
+
+                        <div class="form-group col-md-4">
+
+                            <label class="white-label" for="input-artist">Artist</label>
+                            <input type="text" class="form-control" id="input-artist-1" placeholder="Artist">
+
+                        </div>
+                        <div class="form-group col-md-2">
+
+                            <label class="white-label" for="input-location">Location</label>
+                            <input type="text" class="form-control" id="input-location-1" placeholder="Near Me" value="Near Me">
+
+                        </div>
+                        <div class="form-group col-md-2">
+
+                            <label class="white-label" for="inputDate">When</label>
+                            <select class="form-control" id="input-date-1">
+
+                                    <option value="1">This Week</option>
+                                    <option value="2">Next Week</option>
+                                    <option value="3">This Month</option>
+                                    <option value="4">Next Month</option>
+
+                            </select>
+
+                        </div>
+                        <div class="form-group col-md-2">
+
+                            <label class="white-label" for="inputNearbyVenue">Show Nearby...</label>
+                            <select class="form-control" id="input-nearby-venue-1">
+
+                                    <option value="Parking">Parking</option>
+                                    <option value="Restaurants">Restaurants</option>
+
+                            </select>
+
+                        </div>
+                        <div class="form-group col-md-1">
+
+                            <label class="white-label" for="inputResults">Results</label>
+                            <select class="form-control" id="input-results-1">
+
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group col-md-1">
+                                <button type="submit" class="btn btn-success pull-right">GO</button>
+                        </div>
+                `</div>
+                </form>
             </div>
         </div>
     </nav>
@@ -99,19 +108,19 @@
                                     <h3 class="panel-title">SEARCH</h3>
                                 </div>
                                 <div class="panel-body">
-                                    <form id="user-search-2">
+                                    <form id="user-search-2" no="2">
                                         <div class="form-row">
                                             <div class="form-group col-md-4">
                                                 <label for="inputArtist">Artist</label>
-                                                <input type="text" class="form-control" id="inputArtist2" placeholder="Artist">
+                                                <input type="text" class="form-control" id="input-artist-2" placeholder="Artist">
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label for="inputLocation">Location</label>
-                                                <input type="text" class="form-control" id="inputLocation2" placeholder="Near Me" value="Near Me">
+                                                <input type="text" class="form-control" id="input-location-2" placeholder="Near Me" value="Near Me">
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label for="inputDate">When</label>
-                                                <select class="form-control" id="inputDate2">
+                                                <select class="form-control" id="input-date-2">
                                                     <option value="1">This Week</option>
                                                     <option value="2">Next Week</option>
                                                     <option value="3">This Month</option>
@@ -120,14 +129,14 @@
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label for="inputNearbyVenue">Show Nearby...</label>
-                                                <select class="form-control" id="inputNearbyVenue2">
-                                                    <option value="1">Parking</option>
-                                                    <option value="2">Restaurants</option>
+                                                <select class="form-control" id="input-nearby-venue-2">
+                                                    <option value="Parking">Parking</option>
+                                                    <option value="Restaurants">Restaurants</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-1">
                                                 <label for="inputResults">Results</label>
-                                                <select class="form-control" id="inputResults2">
+                                                <select class="form-control" id="input-results-2">
                                                     <option value="10">10</option>
                                                     <option value="15">15</option>
                                                     <option value="20">20</option>
