@@ -317,7 +317,6 @@ function timeFormat(eventTime) {
     let eventTimeFormat = moment(eventTime).format("dddd, MMMM Do YYYY, h:mm a");
     return eventTimeFormat;
 }
-$(document).ready(function () {
 
 const ourPicks = [
 
