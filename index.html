@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>     <meta charset="utf-8">     <meta http-equiv="X-UA-Compatible"
+content="IE=edge">     <meta name="viewport" content="width=device-width,
+initial-scale=1">     <!-- The above 3 meta tags *must* come first in the
+head; any other head content must come *after* these tags -->     <meta
+name="description" content="">     <meta name="author" content="">     <link
+rel="icon" href="assets/images/favicon.ico">     <title>Behold
+BandCram</title>     <!-- Bootstrap core CSS -->     <link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" i
+ntegrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmk
+zs7" crossorigin="anonymous">     <!-- Custom styles for this template -->
+<link href="assets/css/bandcram.css" rel="stylesheet">     <!--  API helper
+for eventful -->     <script type="text/javascript"
+src="http://api.eventful.com/js/api"></script>     <link
+href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-
+awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQN
+HSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> </head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+
+        <div class="container">
+
+            <!-- Logo -->
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"> <img src="assets/images/BandCram_Logo.png" height="62" alt="BandCram"> </a>
+            </div>
+
+            <!-- Navbar form -->
+            <div class="nav navbar-nav navbar-right" id="navbar-cramform">
+
+                <form id="user-search-1" no="1">
+                    <div class="form-row">
+
+                        <div class="form-group col-md-4">
+
+                            <label class="white-label" for="input-artist">Artist</label>
+                            <input type="text" class="form-control" id="input-artist-1" placeholder="Artist">
+
+                        </div>
+                        <div class="form-group col-md-2">
+
+                            <label class="white-label" for="input-location">Location</label>
+                            <input type="text" class="form-control" id="input-location-1" placeholder="Near Me" value="Near Me">
+
+                        </div>
+                        <div class="form-group col-md-2">
+
+                            <label class="white-label" for="inputDate">When</label>
+                            <select class="form-control" id="input-date-1">
+
+                                    <option value="1">This Week</option>
+                                    <option value="2">Next Week</option>
+                                    <option value="3">This Month</option>
+                                    <option value="4">Next Month</option>
+
+                            </select>
+
+                        </div>
+                        <div class="form-group col-md-2">
+
+                            <label class="white-label" for="inputNearbyVenue">Show Nearby...</label>
+                            <select class="form-control" id="input-nearby-venue-1">
+
+                                    <option value="Parking">Parking</option>
+                                    <option value="Restaurants">Restaurants</option>
+
+                            </select>
+
+                        </div>
+                        <div class="form-group col-md-1">
+
+                            <label class="white-label" for="inputResults">Results</label>
+                            <select class="form-control" id="input-results-1">
+
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group col-md-1">
+                                <button type="submit" class="btn btn-success pull-right">GO</button>
+                        </div>
+                `</div>
+                </form>
+            </div>
+        </div>
+    </nav>
+    
+
+
+
+    <div class="container">
+
+                <div class="starter-template">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="first-search-row row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">SEARCH</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <form id="user-search-2" no="2">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="inputArtist">Artist</label>
+                                                <input type="text" class="form-control" id="input-artist-2" placeholder="Artist">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="inputLocation">Location</label>
+                                                <input type="text" class="form-control" id="input-location-2" placeholder="Near Me" value="Near Me">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="inputDate">When</label>
+                                                <select class="form-control" id="input-date-2">
+                                                    <option value="1">This Week</option>
+                                                    <option value="2">Next Week</option>
+                                                    <option value="3">This Month</option>
+                                                    <option value="4">Next Month</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="inputNearbyVenue">Show Nearby...</label>
+                                                <select class="form-control" id="input-nearby-venue-2">
+                                                    <option value="Parking">Parking</option>
+                                                    <option value="Restaurants">Restaurants</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-1">
+                                                <label for="inputResults">Results</label>
+                                                <select class="form-control" id="input-results-2">
+                                                    <option value="10">10</option>
+                                                    <option value="15">15</option>
+                                                    <option value="20">20</option>
+                                                    <option value="30">30</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-1">
+                                                <button type="submit" class="btn btn-success pull-right">GO</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+        </div>
+
+        <div id="results" class="starter-template">
+        </div>
+    </div>
+
+
+    <!-- /.container -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://api.eventful.com/js/api"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E&libraries=places"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.20.1/moment.min.js"></script>
+    <script src="assets/javascript/app.js"></script>
+    <script type="text/javascript">
+    $(function() {
+
+        $('#show').on('click', function() {
+            $('.card-reveal').slideToggle('slow');
+        });
+
+        $('.card-reveal .close').on('click', function() {
+            $('.card-reveal').slideToggle('slow');
+        });
+
+    });
+
+    </script>
+</body>
+
+</html>
