@@ -342,6 +342,7 @@ $(document).ready(function(){
 
     let myLat;
     let myLon;
+    let initialSearch = false;
 
     if(navigator.geolocation) 
     { 
@@ -365,14 +366,15 @@ $(document).ready(function(){
         console.log(`Artist ${artistSearch} Location ${locationSearch} when ${whenSearch} nearby ${nearbySearch} results ${resultsSearch}`);
 
     });
+
     //getEvents("comedy","St Louis","February",10,"parking");
 
 
     //getEventById("E0-001-106661781-3", 0);
     getEvents("concert", "Durham", "February", 10, "parking");
 
-  //for(let i=0; i<ourPicks.length; ++i){
-  //  getEventById(ourPicks[i].id,i,ourPicks[i].name);
-  //}
+    //for(let i=0; i<ourPicks.length; ++i){
+    //  getEventById(ourPicks[i].id,i,ourPicks[i].name);
+    //}
 
 });
