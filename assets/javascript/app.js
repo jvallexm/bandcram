@@ -23,9 +23,16 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
         console.log(oData);
 
+        // If no events are found
         if(oData.events===null){
 
             console.log("We can't find that");
+            let nope          = newDiv("jumbotron text-center container-fluid");
+            let nopeHeader    = $("<h2>").text("Sorry, we couldn't find any events like that :(");
+            let nopeSubHeader = $("<h4>").text("Try searching for something else");
+            nope.append(nopeHeader);
+            nope.append(nopeSubHeader);
+            $("#results").append(nope);
             return false;
 
         }
@@ -377,14 +384,14 @@ $(document).ready(function(){
 
     });
 
-    //getEvents("music","St Louis","February",10,"parking");
+    getEvents("asdfadsfasdfadf","St Louis","February",10,"parking");
 
 
     //getEventById("E0-001-106661781-3", 0);
     //getEvents("comedy", "walla walla", "February", 30, "parking");
 
-    for(let i=0; i<ourPicks.length; ++i){
-      getEventById(ourPicks[i].id,i,ourPicks[i].name);
-    }
+    //for(let i=0; i<ourPicks.length; ++i){
+      //getEventById(ourPicks[i].id,i,ourPicks[i].name);
+    //}
 
 });
