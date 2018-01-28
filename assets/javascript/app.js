@@ -23,9 +23,20 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
         console.log(oData);
 
+        // If no events are found
         if(oData.events===null){
 
             console.log("We can't find that");
+
+            let nope          = newDiv("jumbotron text-center container-fluid");
+            let nopeHeader    = $("<h2>").text("Sorry, we couldn't find any events like that :(");
+            let nopeSubHeader = $("<h4>").text("Try searching for something else");
+
+            nope.append(nopeHeader);
+            nope.append(nopeSubHeader);
+
+            $("#results").append(nope);
+
             return false;
 
         }
@@ -74,7 +85,7 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
 }
 
-function getEventById(id,i,header) // Gets events from the Eventful API
+function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
 {
 
     // API Query parameters
@@ -92,7 +103,7 @@ function getEventById(id,i,header) // Gets events from the Eventful API
         console.log(event);
         let eventTime = event.start_time;
         let displayTime = timeFormat(eventTime);
-        renderResult(i, event.title, `${displayTime} ${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code}`);
+        renderResult(i, event.title, `${displayTime} ${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code}`,header,isSlider);
         let search;
 
         if (event.performers === null)
@@ -268,10 +279,10 @@ function createCol(element, i) {
 
 }
 
-function renderResult(i,title,desc,header){
+function renderResult(i,title,desc,header,isSlider){
 
-    // The panel for each element in the search list
-    let panel = newDiv("panel-body");
+  // The panel for each element in the search list
+  let panel = newDiv("panel-body");
 
   if(header !== undefined){
     let panelHeader = newDiv("panel-title").text(header);
@@ -308,12 +319,36 @@ function renderResult(i,title,desc,header){
 
     panel.append(row);
 
-    let topPanel = newDiv("panel panel-default");
+    let topPanel = newDiv("panel panel-default").attr("id","panel-" + i);
 
     topPanel.append(panel);
 
-    // Appends the new panel to the results div
-    $("#results").append(topPanel);
+    // If the items are sliders
+    if(isSlider){
+
+        // Adds the item class so that the divs spin in the carousel
+        topPanel.addClass("item");
+
+        // If the index is 0, it sets it to be the first one displayed
+        if(i===0)
+            topPanel.addClass("active");
+
+        // appends the new panel to the carousel
+        $("#carousel").append(topPanel);
+
+        // If it's the last one in the list, it turns the carousel on autoplay
+        if(i===3)
+        {
+            $('.carousel').carousel({
+                interval: 2000
+            }); 
+        }
+
+    }
+    else{
+        // Appends the new panel to the results div
+        $("#results").append(topPanel);
+    }
 
 
 }
@@ -370,21 +405,36 @@ $(document).ready(function(){
         console.log(`Artist ${artistSearch} Location ${locationSearch} when ${whenSearch} nearby ${nearbySearch} results ${resultsSearch}`);
 
         if(initialSearch){
+
+            // Hides the main search bar
             $(".first-search-row").css("display","none");
             $("#user-search-1").css("display","inline");
+
+            //Stops the running carousel and empties the sliders div
+            $('.carousel').carousel("pause"); 
+            $("#sliders").empty();
+            $("#sliders").css("display","none");
+
+            // Makes sure this method only runs once!
             initialSearch = false;
         }
 
     });
 
-    //getEvents("music","St Louis","February",10,"parking");
+    //getEvents("comedy","St Louis","February",10,"parking");
 
-
-    //getEventById("E0-001-106661781-3", 0);
-    //getEvents("comedy", "walla walla", "February", 30, "parking");
+    // Carousel Events
+    $("#play").on("click",function(){
+        $('.carousel').carousel({
+                interval: 2000
+        }); 
+    });
+    $("#pause").on("click",function(){
+        $('.carousel').carousel("pause"); 
+    });
 
     for(let i=0; i<ourPicks.length; ++i){
-      getEventById(ourPicks[i].id,i,ourPicks[i].name);
+      getEventById(ourPicks[i].id,i,ourPicks[i].name,true);
     }
 
 });

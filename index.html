@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>     <meta charset="utf-8">     <meta http-equiv="X-UA-Compatible"
-content="IE=edge">     <meta name="viewport" content="width=device-width,
-initial-scale=1">     <!-- The above 3 meta tags *must* come first in the
-head; any other head content must come *after* these tags -->     <meta
-name="description" content="">     <meta name="author" content="">     <link
-rel="icon" href="assets/images/favicon.ico">     <title>Behold
-BandCram</title>     <!-- Bootstrap core CSS -->     <link rel="stylesheet"
-href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" i
-ntegrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmk
-zs7" crossorigin="anonymous">     <!-- Custom styles for this template -->
-<link href="assets/css/bandcram.css" rel="stylesheet">     <!--  API helper
-for eventful -->     <script type="text/javascript"
-src="http://api.eventful.com/js/api"></script>     <link
-href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-
-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQN
-HSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> </head>
+<head>     
+    <meta charset="utf-8">     
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">     
+    <meta name="viewport" content="width=device-width, initial-scale=1">     
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->     
+    <meta name="description" content="">     
+    <meta name="author" content="">     
+    <link rel="icon" href="assets/images/favicon.ico">     
+    <title>Behold BandCram</title>     
+    <!-- Bootstrap core CSS -->     
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">     
+    <!-- Custom styles for this template -->
+    <link href="assets/css/bandcram.css" rel="stylesheet">     
+    <!--  API helper for eventful -->     
+    <script type="text/javascript" src="http://api.eventful.com/js/api"></script>     
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+</head>
 
 <body>
 
@@ -158,9 +160,37 @@ HSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> </head>
             </div>
         </div>
 
+        <!-- Where the results go -->
+
         <div id="results" class="starter-template">
 
         </div>
+        
+        <!-- Where the carousel goes -->
+
+        <div id="sliders" class="carousel slide" data-ride="carousel">
+            
+
+            <!-- Carousel slides -->
+            <div id="carousel" class="carousel-inner">
+                        
+            </div>
+            
+            <!-- Carosel Controls -->
+            <div id="controls">
+                <a class="left" href="#sliders" data-slide="prev" title="Previous Slide">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <i id="pause" class="fa fa-pause" title="Pause"></i>
+                <i id="play" class="fa fa-play" title="Play"></i>
+                <a class="right" href="#sliders" data-slide="next" title="Next Slide">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+
+        </div>
+
+
     </div>
 
 
@@ -169,7 +199,7 @@ HSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> </head>
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://api.eventful.com/js/api"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E&libraries=places"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.20.1/moment.min.js"></script>
