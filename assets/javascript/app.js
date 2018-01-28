@@ -13,8 +13,8 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
         where: where,
         date: date,
         page_size: results,
-        sort_order: "popularity"
-
+        sort_order: "popularity",
+        within: 50
     };
 
     EVDB.API.call("/events/search", oArgs, function (oData) {
@@ -100,7 +100,7 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
 
         // Events array from api call 
 
-        console.log(event);
+        // console.log(event);
         let eventTime = event.start_time;
         let displayTime = timeFormat(eventTime);
         renderResult(i, event.title, `${displayTime} ${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code}`,header,isSlider);
@@ -377,6 +377,7 @@ const ourPicks = [
 
 ];
 
+
 $(document).ready(function(){
 
     let myLat;
@@ -384,26 +385,40 @@ $(document).ready(function(){
     let initialSearch = true;
 
     if(navigator.geolocation) 
-    { 
-        navigator.geolocation.getCurrentPosition(function(position){
-
-                    myLat = position.coords.latitude;
-                    myLon = position.coords.longitude;
-        });  
+    {
+       navigator.geolocation.getCurrentPosition(function(position){
+    
+            myLat = position.coords.latitude;
+            myLon = position.coords.longitude;
+       });  
     }
-
+    
+    
     $("#user-search-1, #user-search-2").submit(function( event ) {
         event.preventDefault();
         let thisForm = this.id.split("-")[2];
-
         let artistSearch   = $("#input-artist-" + thisForm).val().trim();
         let locationSearch = $("#input-location-" + thisForm).val().trim();
         let whenSearch     = $("#input-date-" + thisForm).val().trim();
         let nearbySearch   = $("#input-nearby-venue-" + thisForm).val().trim();
         let resultsSearch  = $("#input-results-" + thisForm).val().trim();
+        
+        if (whenSearch == 1) {
+            var searchTime = "This Week";
+        } else if (whenSearch == 2) {
+            var searchTime = "Next Week"
+        } else if (whenSearch == 3) {
+            var searchTime = moment().format("MMMM");
+        } else if (whenSearch == 4) {
+            var searchTime = moment().add(1, "M").format("MMMM");
+        };
 
-        console.log(`Artist ${artistSearch} Location ${locationSearch} when ${whenSearch} nearby ${nearbySearch} results ${resultsSearch}`);
+        if (locationSearch == "Near Me") {
+           locationSearch = `${myLat}, ${myLon}`;
+        };
 
+        getEvents(artistSearch, locationSearch, searchTime, resultsSearch, nearbySearch);
+       
         if(initialSearch){
 
             // Hides the main search bar
