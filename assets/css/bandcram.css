@@ -158,3 +158,6 @@ input, textarea{
 .panel {
     margin-top: 20px;
 }
+#user-search-1{
+    display: none;
+}

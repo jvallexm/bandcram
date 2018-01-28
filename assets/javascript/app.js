@@ -4,7 +4,7 @@ const google_places_key = `AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E`;   // Google
 
 function getEvents(q, where, date, results, near) // Gets events from the Eventful API
 {
-
+    $("#results").empty();
     // API Query parameters
     var oArgs = {
 
@@ -20,6 +20,16 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
     EVDB.API.call("/events/search", oArgs, function (oData) {
 
         // Events array from api call 
+
+        console.log(oData);
+
+        if(oData.events===null){
+
+            console.log("We can't find that");
+            return false;
+
+        }
+
         let eventsArray = oData.events.event;
 
         for (let i = 0; i < eventsArray.length; ++i) {
@@ -336,7 +346,7 @@ $(document).ready(function(){
 
     let myLat;
     let myLon;
-    let initialSearch = false;
+    let initialSearch = true;
 
     if(navigator.geolocation) 
     { 
@@ -359,16 +369,22 @@ $(document).ready(function(){
 
         console.log(`Artist ${artistSearch} Location ${locationSearch} when ${whenSearch} nearby ${nearbySearch} results ${resultsSearch}`);
 
+        if(initialSearch){
+            $(".first-search-row").css("display","none");
+            $("#user-search-1").css("display","inline");
+            initialSearch = false;
+        }
+
     });
 
-    //getEvents("comedy","St Louis","February",10,"parking");
+    //getEvents("music","St Louis","February",10,"parking");
 
 
     //getEventById("E0-001-106661781-3", 0);
-    getEvents("comedy", "washington", "February", 30, "parking");
+    //getEvents("comedy", "walla walla", "February", 30, "parking");
 
-    //for(let i=0; i<ourPicks.length; ++i){
-    //  getEventById(ourPicks[i].id,i,ourPicks[i].name);
-    //}
+    for(let i=0; i<ourPicks.length; ++i){
+      getEventById(ourPicks[i].id,i,ourPicks[i].name);
+    }
 
 });
