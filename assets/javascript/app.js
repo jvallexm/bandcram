@@ -114,7 +114,7 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
             search = event.performers.performer.name;
         
         getYouTubeVideo(search, i);
-        getGoogleMap(i, event.latitude, event.longitude, "map-" + i, "Parking", 1000);
+        getGoogleMap(i, event.latitude, event.longitude, "map-" + i, "parking", 1000);
 
     });
 
@@ -126,7 +126,14 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
 function getGoogleMap(i, lat, lon, div, near, radius) {
 
     // Renders the card title for the map
-    $("#map-title-" + i).text(`${near} within ${radius}M`);
+    let nearText = near;
+    if(near == "restaurant"){
+        nearText = "Restaurants";
+    } 
+    else if (near == "parking"){
+        nearText = "Parking";
+    };
+    $("#map-title-" + i).text(`${nearText} within ${radius}M`);
 
     /* Below from the Google Places API Documentation */
 
@@ -416,7 +423,7 @@ $(document).ready(function(){
         if (locationSearch == "Near Me") {
            locationSearch = `${myLat}, ${myLon}`;
         };
-
+        
         getEvents(artistSearch, locationSearch, searchTime, resultsSearch, nearbySearch);
        
         if(initialSearch){
