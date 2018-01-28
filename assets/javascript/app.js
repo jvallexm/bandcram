@@ -420,7 +420,7 @@ $(document).ready(function(){
             var searchTime = moment().add(1, "M").format("MMMM");
         };
 
-        if (locationSearch == "Near Me") {
+        if (locationSearch == "Near Me" || locationSearch == "") {
            locationSearch = `${myLat}, ${myLon}`;
         };
         
