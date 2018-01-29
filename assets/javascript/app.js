@@ -1,12 +1,15 @@
-const eventful_api_key = `G6bFxWDSpqCDTwjr`;                           // Eventful API Key
-const yt_api_key = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`;          // YouTube API Key
-const google_places_key = `AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E`;   // Google Places API Key
+
+const eventful_api_key  = `G6bFxWDSpqCDTwjr`;                           // Eventful API Key
+const yt_api_key        = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`;    // YouTube API Key
+const google_places_key = `AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E`;    // Google Places API Key
+
 let timerOn  = false;
 
 function getEvents(q, where, date, results, near) // Gets events from the Eventful API
 {
     timerOn = false;
     $("#results").empty();
+
     // API Query parameters
     var oArgs = {
 
@@ -23,7 +26,7 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
         // Events array from api call 
 
-        console.log(oData);
+        // console.log(oData);
 
         // If no events are found
         if(oData.events===null){
@@ -47,13 +50,10 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
         for (let i = 0; i < eventsArray.length; ++i) {
 
-            let event = eventsArray[i]; //The current event
-
-            let eventTime = event.start_time;
-
+            let event       = eventsArray[i]; //The current event
+            let eventTime   = event.start_time;
             let displayTime = timeFormat(eventTime);
 
-            // console.log(moment())
             // Let's get the time and date, the format is YYYY-MM-DD HH:MM:SS
 
             renderResult(i, event.title, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); // Creates a new panel for each of the returned events
@@ -68,8 +68,10 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
             if (event.performers === null)
                 search = event.title;
+
             else if (event.performers.performer[0] !== undefined)
                 search = event.performers.performer[0].name;
+
             else
                 search = event.performers.performer.name;
            
@@ -157,19 +159,21 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address) {
 
     // Renders the card title for the map
     let nearText = near;
+
     if(near == "restaurant"){
         nearText = "Restaurants";
     } 
     else if (near == "parking"){
         nearText = "Parking";
     };
+
     $("#map-title-" + i).text(`${nearText} within ${radius}M`);
+    $("#ph-title-" + i).text(address);
 
     /* Below from the Google Places API Documentation */
 
     var map;
     var infowindow;
-    var geocoder = new google.maps.Geocoder();
 
     function initMap() {
 
@@ -188,59 +192,14 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address) {
         infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
 
-        function getDetails(){
-
-            geocoder.geocode({
-
-              address: address,
-                componentRestrictions:
-                { postalCode: postalcode },
-                region: "us"
-
-            },function(results,status){
-
-                if(status === google.maps.GeocoderStatus.OK){
-
-                    let placeId = results[0].place_id;
-
-                        service.getDetails({
-
-                            placeId: placeId
-
-                        }, function(place,status){
-
-                            //console.log(`Status of ${address}: ${status}`);
-
-                            if (status === google.maps.places.PlacesServiceStatus.OK){
-
-                                $("#ph-title-" + i).text(address);
-                                callbackImage(place,status);
-
-                            } else {
-
-                                doQueuedFunction(getDetails);
-
-                            }
-
-                        });
-
-                } else {
-
-                    doQueuedFunction(getDetails);
-
-                }
-        });
-
-
-        }
 
         service.nearbySearch({
+
             location: pyrmont,
             radius: radius,
             type: [near]
-        }, callbackMap);
 
-        getDetails();
+        }, callbackMap);
 
     }
 
@@ -250,16 +209,9 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address) {
             for (var i = 0; i < results.length; i++) {
                 createMarker(results[i]);
             }
-        }
-    }
+        } else {
 
-    function callbackImage(place,status){
-
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-
-                let url = place.photos[0].getUrl({ 'maxWidth': 400, 'maxHeight': 400 });
-                let image = $("<img>").attr("src", url).addClass("fill"); 
-                $("#ph-" + i).append(image);
+            console.log("Maps don't work");
 
         }
     }
@@ -280,6 +232,7 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address) {
     /* Above from the Google Places API Documentation */
 
     initMap();
+
 }
 
 // Searches YouTube for a single video q and appends it to a div
@@ -296,9 +249,6 @@ function getYouTubeVideo(q, i) {
 
         }, function (data) {
 
-            //console.log("searched for " + q);
-            //console.log(data);
-
             // If the total results are 0, appends a gif of TV static, otherwise it appends the video
 
             if (data.pageInfo.totalResults === 0) {
@@ -313,10 +263,11 @@ function getYouTubeVideo(q, i) {
                 let link = $("<a>").attr("href","https://www.youtube.com/results?search_query=" + q)
                                    .attr("target","_blank")
                                    .text("Watch More →");
+
                 $("#video-title-" + i).empty();
                 $("#video-title-" + i).append(link);
                 $("<iframe>").attr("src", "https://www.youtube.com/embed/" + data.items[0].id.videoId)
-                    .attr("frameborder", "0").appendTo("#video-" + i);
+                             .attr("frameborder", "0").appendTo("#video-" + i);
 
             }
         });
@@ -454,8 +405,10 @@ function renderResult(i,title,desc,header,isSlider){
 
 
 function timeFormat(eventTime) {
+
     let eventTimeFormat = moment(eventTime).format("dddd, MMMM Do YYYY, h:mm a");
     return eventTimeFormat;
+
 }
 
 const ourPicks = [
@@ -494,27 +447,43 @@ $(document).ready(function(){
     
     
     $("#user-search-1, #user-search-2").submit(function( event ) {
+
         event.preventDefault();
-        let thisForm = this.id.split("-")[2];
+
+        let thisForm       = this.id.split("-")[2];
         let artistSearch   = $("#input-artist-" + thisForm).val().trim();
         let locationSearch = $("#input-location-" + thisForm).val().trim();
         let whenSearch     = $("#input-date-" + thisForm).val().trim();
         let nearbySearch   = $("#input-nearby-venue-" + thisForm).val().trim();
         let resultsSearch  = $("#input-results-" + thisForm).val().trim();
         
+        let searchTime;
+
         if (whenSearch == 1) {
-            var searchTime = "This Week";
+
+            searchTime = "This Week";
+
         } else if (whenSearch == 2) {
-            var searchTime = "Next Week"
+
+            searchTime = "Next Week"
+
         } else if (whenSearch == 3) {
-            var searchTime = moment().format("MMMM");
+
+            searchTime = moment().format("MMMM");
+
         } else if (whenSearch == 4) {
-            var searchTime = moment().add(1, "M").format("MMMM");
+
+            searchTime = moment().add(1, "M").format("MMMM");
+
         };
 
         if (locationSearch == "Near Me" || locationSearch == "") {
+
            locationSearch = `${myLat}, ${myLon}`;
+
         };
+
+        /** Data validation goes here **/
         
         getEvents(artistSearch, locationSearch, searchTime, resultsSearch, nearbySearch);
        
@@ -547,6 +516,7 @@ $(document).ready(function(){
                 interval: 4000
         }); 
     });
+    
     $("#pause").on("click",function(){
         $('.carousel').carousel("pause"); 
     });
