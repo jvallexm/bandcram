@@ -222,6 +222,12 @@ margin-top: 15px;
 
  }
 
+.fill{
+    width: 100%;
+}
+#test{
+    display: none;
+}
 
 
 /* responsive screen size */
@@ -309,6 +315,7 @@ margin-top: 15px;
 
 
 }
+
 
 
 
