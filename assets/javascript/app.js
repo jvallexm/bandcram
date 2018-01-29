@@ -54,7 +54,7 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
             // console.log(moment())
             // Let's get the time and date, the format is YYYY-MM-DD HH:MM:SS
 
-            renderResult(i, event.title, `${displayTime} ${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code}`); // Creates a new panel for each of the returned events
+            renderResult(i, event.title, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); // Creates a new panel for each of the returned events
 
             // console.log(event.title);        // Event Title
             console.log(event);              // Event Object
@@ -79,7 +79,7 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
             // Renders a Google Map based on the search and index i, the latitude and longitude of the event location
             // The near parameter and 1000 meters 
-            getGoogleMap(i, event.latitude, event.longitude, "map-" + i, near, 1000);
+            getGoogleMap(i, event.latitude, event.longitude, "map-" + i, near, 1000, event.postal_code, event.venue_name);
 
 
         }
@@ -118,61 +118,27 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
         
         getGooglePhoto(i, event.country_abbr2, event.postal_code, event.venue_name, "map-" + i);
         getYouTubeVideo(search, i);
-        getGoogleMap(i, event.latitude, event.longitude, "map-" + i, "parking", 1000);
+        getGoogleMap(i, event.latitude, event.longitude, "map-" + i, "parking", 1000, event.postal_code, event.venue_name);
 
     });
 
 }
 
 //Renders Google Map Api for Photo
-function getGooglePhoto(i, country, postalCode, venue, div) {
-    console.log(i + " " + country + " " + postalCode + " " + venue);
+function getGooglePhoto(i, country, postalcode, address, div) {
+
+    console.log(i + " " + country + " " + postalcode + " " + address);
     var geocoder = new google.maps.Geocoder();
-    var placeid = "";
-    var postalcode = postalCode;
-    var address = venue;
     var map;
-    var url;
 
-    geocoder.geocode({
-        'address': address,
-        'componentRestrictions':
-            { 'postalCode': postalcode },
-        region: "us"
-    }, function (results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            console.log(results);
-            placeid = results[0].place_id;
-            console.log(placeid);
+    $("#ph-title-" + i).text(address);
 
-            var request = {
-                //placeId: "ChIJT_x1AIOB0IkRhcd1YOHXJXk"
-                placeId: placeid
-            };
-
-            map = new google.maps.Map(document.getElementById(div), {
-            }); 
-            var service = new google.maps.places.PlacesService(map);
-
-            service.getDetails(request, function (place, status) {
-                console.log(status)
-                if (status == google.maps.places.PlacesServiceStatus.OK) {
-                    console.log(place)
-                    for (let j = 0; j < place.photos.length; j++) {
-                        console.log(place.photos[j].getUrl({ 'maxWidth': 400, 'maxHeight': 400 }));
-                        url = place.photos[0].getUrl({ 'maxWidth': 400, 'maxHeight': 400 }); 
-                    }
-                    let image = $("<img>").attr("src", url);
-                    $("#ph-" + i).append(image);
-                }
-            });
-        }
-    });
+    
 }
 
 // Renders a Google Map
 
-function getGoogleMap(i, lat, lon, div, near, radius) {
+function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address) {
 
     // Renders the card title for the map
     let nearText = near;
@@ -188,6 +154,7 @@ function getGoogleMap(i, lat, lon, div, near, radius) {
 
     var map;
     var infowindow;
+    var geocoder = new google.maps.Geocoder();
 
     function initMap() {
 
@@ -205,11 +172,34 @@ function getGoogleMap(i, lat, lon, div, near, radius) {
 
         infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
+
         service.nearbySearch({
             location: pyrmont,
             radius: radius,
             type: [near]
         }, callback);
+
+        geocoder.geocode({
+            address: address,
+            componentRestrictions:
+                { postalCode: postalcode },
+            region: "us"
+        },function(results,status){
+
+            if( status === google.maps.GeocoderStatus.OK){
+                let request = {
+                    placeId: results[0].place_id
+                };
+                service.getDetails(request, function(place,status){
+                    console.log(status);
+                    if (status == google.maps.places.PlacesServiceStatus.OK) {
+                        let url = place.photos[0].getUrl({ 'maxWidth': 400, 'maxHeight': 400 });
+                        let image = $("<img>").attr("src", url).addClass("fill"); 
+                        $("#ph-" + i).append(image);
+                    }
+                });
+            }
+        });
     }
 
     function callback(results, status) {
