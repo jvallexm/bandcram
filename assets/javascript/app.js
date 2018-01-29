@@ -347,7 +347,7 @@ function renderResult(i,title,desc,header,isSlider){
         if(i===3)
         {
             $('.carousel').carousel({
-                interval: 2000
+                interval: 4000
             }); 
         }
 
