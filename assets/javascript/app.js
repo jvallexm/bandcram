@@ -448,7 +448,7 @@ $(document).ready(function(){
     // Carousel Events
     $("#play").on("click",function(){
         $('.carousel').carousel({
-                interval: 2000
+                interval: 4000
         }); 
     });
     $("#pause").on("click",function(){
