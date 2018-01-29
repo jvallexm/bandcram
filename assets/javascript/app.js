@@ -127,7 +127,7 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
 //Renders Google Map Api for Photo
 function getGooglePhoto(i, country, postalcode, address, div) {
 
-    console.log(i + " " + country + " " + postalcode + " " + address);
+    //console.log(i + " " + country + " " + postalcode + " " + address);
     $("#ph-title-" + i).text(address);
 
     
@@ -170,29 +170,68 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address) {
         infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
 
-        geocoder.geocode({
+        function getDetails(){
 
-            address: address,
-            componentRestrictions:
+            geocoder.geocode({
+
+              address: address,
+                componentRestrictions:
                 { postalCode: postalcode },
-            region: "us"
+                region: "us"
 
-        },function(results,status){
+            },function(results,status){
 
-            if( status === google.maps.GeocoderStatus.OK){
+                if(status === google.maps.GeocoderStatus.OK){
 
-                service.nearbySearch({
-                    location: pyrmont,
-                    radius: radius,
-                    type: [near]
-                }, callbackMap);
+                    let placeId = results[0].place_id;
 
-                service.getDetails({
-                    placeId: results[0].place_id
-                }, callbackImage);
-                
-            }
+                        service.getDetails({
+
+                            placeId: placeId
+
+                        }, function(place,status){
+
+                            console.log(`Status of ${address}: ${status}`);
+
+                            if (status === google.maps.places.PlacesServiceStatus.OK){
+
+                                callbackImage(place,status);
+
+                            } else {
+
+                                setTimeout(function(){
+
+                                    console.log(`Retrying ${address}`);
+                                    getDetails();
+
+                                },2000);
+
+                            }
+
+                        });
+
+                } else {
+
+                    setTimeout(function(){
+
+                        getDetails();
+
+                    }, 2000)
+
+                }
         });
+
+
+        }
+
+        service.nearbySearch({
+            location: pyrmont,
+            radius: radius,
+            type: [near]
+        }, callbackMap);
+
+        getDetails();
+
     }
 
     function callbackMap(results, status) {
@@ -205,11 +244,13 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address) {
     }
 
     function callbackImage(place,status){
-        console.log(status);
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
+
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+
                 let url = place.photos[0].getUrl({ 'maxWidth': 400, 'maxHeight': 400 });
                 let image = $("<img>").attr("src", url).addClass("fill"); 
                 $("#ph-" + i).append(image);
+
         }
     }
 
