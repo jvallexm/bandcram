@@ -71,6 +71,9 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
             else
                 search = event.performers.performer.name;
 
+            //Renders Google Map to find a venue photo for index i
+            getGooglePhoto(i, event.country_abbr2, event.postal_code, event.venue_name, "map-" + i);
+           
             // Renders a YouTube video based on the search and index i 
             getYouTubeVideo(search, i);
 
@@ -113,6 +116,7 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
         else
             search = event.performers.performer.name;
         
+        getGooglePhoto(i, event.country_abbr2, event.postal_code, event.venue_name, "map-" + i);
         getYouTubeVideo(search, i);
         getGoogleMap(i, event.latitude, event.longitude, "map-" + i, "parking", 1000);
 
@@ -120,6 +124,51 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
 
 }
 
+//Renders Google Map Api for Photo
+function getGooglePhoto(i, country, postalCode, venue, div) {
+    console.log(i + " " + country + " " + postalCode + " " + venue);
+    var geocoder = new google.maps.Geocoder();
+    var placeid = "";
+    var postalcode = postalCode;
+    var address = venue;
+    var map;
+    var url;
+
+    geocoder.geocode({
+        'address': address,
+        'componentRestrictions':
+            { 'postalCode': postalcode },
+        region: "us"
+    }, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            console.log(results);
+            placeid = results[0].place_id;
+            console.log(placeid);
+
+            var request = {
+                //placeId: "ChIJT_x1AIOB0IkRhcd1YOHXJXk"
+                placeId: placeid
+            };
+
+            map = new google.maps.Map(document.getElementById(div), {
+            }); 
+            var service = new google.maps.places.PlacesService(map);
+
+            service.getDetails(request, function (place, status) {
+                console.log(status)
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    console.log(place)
+                    for (let j = 0; j < place.photos.length; j++) {
+                        console.log(place.photos[j].getUrl({ 'maxWidth': 400, 'maxHeight': 400 }));
+                        url = place.photos[0].getUrl({ 'maxWidth': 400, 'maxHeight': 400 }); 
+                    }
+                    let image = $("<img>").attr("src", url);
+                    $("#ph-" + i).append(image);
+                }
+            });
+        }
+    });
+}
 
 // Renders a Google Map
 
