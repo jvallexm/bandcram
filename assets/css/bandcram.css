@@ -183,6 +183,7 @@ input, textarea{
 
 .form-group {
     padding: 0 5px;
+    margin-bottom: 0;
 }
 
 @media (max-width: 980px) {
@@ -193,6 +194,7 @@ input, textarea{
 
 .navbar-right {
     width: 100%;
+        max-height: none;
 }
 
     .navbar-brand {
