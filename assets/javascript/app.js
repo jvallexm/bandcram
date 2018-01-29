@@ -327,7 +327,7 @@ function createCol(element, i) {
 
 
     // Adds the card to a column
-    let col = newDiv("col-xs-4")
+    let col = newDiv("col-sm-4")
         .append(card);
 
     // Returns all the nested elements together
