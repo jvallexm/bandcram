@@ -1,9 +1,11 @@
 const eventful_api_key = `G6bFxWDSpqCDTwjr`;                           // Eventful API Key
 const yt_api_key = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`;          // YouTube API Key
 const google_places_key = `AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E`;   // Google Places API Key
+let timerOn  = false;
 
 function getEvents(q, where, date, results, near) // Gets events from the Eventful API
 {
+    timerOn = false;
     $("#results").empty();
     // API Query parameters
     var oArgs = {
@@ -96,6 +98,8 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
 
     };
 
+    timerOn = false;
+
     EVDB.API.call("/events/get", oArgs, function (event) {
 
         // Events array from api call 
@@ -120,7 +124,6 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
 
 }
 
-let timerOn  = false;
 let timeLeft = 2000;
 
 function initializeTimer(){
