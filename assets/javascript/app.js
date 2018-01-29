@@ -523,6 +523,7 @@ $(document).ready(function(){
             // Hides the main search bar
             $(".first-search-row").css("display","none");
             $("#user-search-1").css("display","inline");
+            $("#navbar-toggly").css("display","inline");
 
             //Stops the running carousel and empties the sliders div
             $('.carousel').carousel("pause"); 
