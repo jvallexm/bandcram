@@ -57,7 +57,7 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
             renderResult(i, event.title, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); // Creates a new panel for each of the returned events
 
             // console.log(event.title);        // Event Title
-            console.log(event);              // Event Object
+            //  console.log(event);              // Event Object
             // console.log(event.performers);   // Event performers
 
             let search;  // Variable for YouTube Search
@@ -128,9 +128,6 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
 function getGooglePhoto(i, country, postalcode, address, div) {
 
     console.log(i + " " + country + " " + postalcode + " " + address);
-    var geocoder = new google.maps.Geocoder();
-    var map;
-
     $("#ph-title-" + i).text(address);
 
     
@@ -173,41 +170,46 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address) {
         infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
 
-        service.nearbySearch({
-            location: pyrmont,
-            radius: radius,
-            type: [near]
-        }, callback);
-
         geocoder.geocode({
+
             address: address,
             componentRestrictions:
                 { postalCode: postalcode },
             region: "us"
+
         },function(results,status){
 
             if( status === google.maps.GeocoderStatus.OK){
-                let request = {
+
+                service.nearbySearch({
+                    location: pyrmont,
+                    radius: radius,
+                    type: [near]
+                }, callbackMap);
+
+                service.getDetails({
                     placeId: results[0].place_id
-                };
-                service.getDetails(request, function(place,status){
-                    console.log(status);
-                    if (status == google.maps.places.PlacesServiceStatus.OK) {
-                        let url = place.photos[0].getUrl({ 'maxWidth': 400, 'maxHeight': 400 });
-                        let image = $("<img>").attr("src", url).addClass("fill"); 
-                        $("#ph-" + i).append(image);
-                    }
-                });
+                }, callbackImage);
+                
             }
         });
     }
 
-    function callback(results, status) {
+    function callbackMap(results, status) {
 
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 createMarker(results[i]);
             }
+        }
+    }
+
+    function callbackImage(place,status){
+        console.log(status);
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+                let url = place.photos[0].getUrl({ 'maxWidth': 400, 'maxHeight': 400 });
+                let image = $("<img>").attr("src", url).addClass("fill"); 
+                $("#ph-" + i).append(image);
         }
     }
 
