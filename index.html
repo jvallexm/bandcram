@@ -29,11 +29,18 @@
 
             <!-- Logo -->
             <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+<span class="glyphicon glyphicon-search"></span>
+            </button>
                 <a class="navbar-brand" href="#"> <img src="assets/images/BandCram_Logo.png" height="62" alt="BandCram"> </a>
             </div>
 
             <!-- Navbar form -->
-            <div class="nav navbar-nav navbar-right" id="navbar-cramform">
+            <div class="nav navbar-nav navbar-right navbar-collapse collapse" id="navbar">
+
+                <ul class="nav navbar-nav">
+                    <li>
 
                 <form id="user-search-1" no="1">
                     <div class="form-row">
@@ -89,6 +96,9 @@
                         </div>
                 </div>
                 </form>
+            </li>
+            
+        </ul>
             </div>
         </div>
     </nav>
