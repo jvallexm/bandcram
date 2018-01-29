@@ -94,13 +94,14 @@ a.navbar-brand {
 }
 
 
+
 /*.concert-back > p , h3 { 
         padding: 0 15px;
 }
 */
 
 .btn {
-    margin-top: 25px;
+    margin-top: 20px;
 }
 
 .embed-responsive {
@@ -142,6 +143,10 @@ table td {
     letter-spacing: 1px;
 }
 
+label {
+    margin: 0;
+}
+
 .grey-box {
     background-color: #f5f5f5;
 }
@@ -151,6 +156,7 @@ textarea {
     background-color: #f5f5f5;
     color: #FFF;
 }
+
 
 
 
@@ -192,17 +198,50 @@ textarea {
     margin-bottom: 0;
 }
 
+.navbar-toggle {
+    background-color: lightgray;
+}
 
+.navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
+    background-color: white;
+}
+
+ul, li {
+    width: 100%;
+}
+
+.glyphicon-search {
+
+font-size: 24px;
+
+}
+
+.navbar-toggle {
+ 
+margin-top: 15px;
+
+ }
 
 
 
 /* responsive screen size */
 
-@media (max-width: 980px) {
+@media (max-width: 991px) {
 
-    .navbar {
-        background-color: red;
+ /* make searchbutton appear earlier*/
+     .navbar-collapse.collapse {
+        display: none !important;
     }
+    .navbar-collapse.collapse.in {
+        display: block !important;
+    }
+    .navbar-header .collapse, .navbar-toggle {
+        display:block !important;
+    }
+    .navbar-header {
+        float:none;
+    }
+/* end searchbutton hack*/
 
     .navbar-right {
         width: 100%;
@@ -211,7 +250,9 @@ textarea {
     }
 
     .navbar-brand {
-        float: right;
+        margins: auto;
+        /*        float: right;
+*/
         padding-right: 0;
     }
 
@@ -220,7 +261,7 @@ textarea {
         margin-left: 0;
     }
 
-    .container>.navbar-header{
+    .container>.navbar-header {
         margin-left: 0;
     }
 
@@ -232,43 +273,43 @@ textarea {
         margin: 10px 0;
     }
 
-/*.container {
-    padding: 0;
-}*/
+    .navbar-inverse div.navbar-collapse {
+        border-top: none;
+        box-shadow: none;
+    }
 
+        .container>.navbar-collapse{
+        margin: 25px 0;
+    }
 }
+
 
 
 /* end 980 media adaptations */
 
 @media (max-width: 768px) {
 
-    .navbar {
-        background-color: blue;
-    }
-
     .navbar-nav {
         margin: 0;
     }
 
     .container {
-    padding: 0 15px;
+        padding: 0 15px;
+    }
+
+
 }
-}
+
 
 
 /* end 768 media adaptations */
 
 @media (max-width: 640px) {
 
-    .navbar {
-        background-color: purple;
-    }
 
-    .navbar-brand {
-        float: right;
-    }
+
 }
+
 
 
 /* end 640 media adaptations */
