@@ -70,9 +70,6 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
                 search = event.performers.performer[0].name;
             else
                 search = event.performers.performer.name;
-
-            //Renders Google Map to find a venue photo for index i
-            getGooglePhoto(i, event.country_abbr2, event.postal_code, event.venue_name, "map-" + i);
            
             // Renders a YouTube video based on the search and index i 
             getYouTubeVideo(search, i);
@@ -116,7 +113,6 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
         else
             search = event.performers.performer.name;
         
-        getGooglePhoto(i, event.country_abbr2, event.postal_code, event.venue_name, "map-" + i);
         getYouTubeVideo(search, i);
         getGoogleMap(i, event.latitude, event.longitude, "map-" + i, "parking", 1000, event.postal_code, event.venue_name);
 
@@ -124,13 +120,32 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
 
 }
 
-//Renders Google Map Api for Photo
-function getGooglePhoto(i, country, postalcode, address, div) {
+let timerOn  = false;
+let timeLeft = 2000;
 
-    //console.log(i + " " + country + " " + postalcode + " " + address);
-    $("#ph-title-" + i).text(address);
+function initializeTimer(){
 
-    
+    if(!timerOn){
+        console.log("TIMER IS ON!")
+        timerOn = true;
+        let newInterval = setInterval(function(){
+            timeLeft -= 100;
+            if(timeLeft < 100){
+                clearInterval(newInterval);
+            }
+        },100);
+
+    }
+
+}
+
+function doQueuedFunction(callback){
+
+    initializeTimer();
+    let currentTimeLeft = timeLeft;
+    setTimeout(function(){
+        callback();
+    },currentTimeLeft);
 }
 
 // Renders a Google Map
@@ -191,20 +206,16 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address) {
 
                         }, function(place,status){
 
-                            console.log(`Status of ${address}: ${status}`);
+                            //console.log(`Status of ${address}: ${status}`);
 
                             if (status === google.maps.places.PlacesServiceStatus.OK){
 
+                                $("#ph-title-" + i).text(address);
                                 callbackImage(place,status);
 
                             } else {
 
-                                setTimeout(function(){
-
-                                    console.log(`Retrying ${address}`);
-                                    getDetails();
-
-                                },2000);
+                                doQueuedFunction(getDetails);
 
                             }
 
@@ -212,11 +223,7 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address) {
 
                 } else {
 
-                    setTimeout(function(){
-
-                        getDetails();
-
-                    }, 2000)
+                    doQueuedFunction(getDetails);
 
                 }
         });
