@@ -533,6 +533,9 @@ $(document).ready(function(){
             initialSearch = false;
         }
 
+        // When using expanded search bar at small screen sizes, forces collapse after submit
+        $('.navbar-collapse').collapse('hide');
+
     });
 
     //getEvents("comedy","St Louis","February",10,"parking");
