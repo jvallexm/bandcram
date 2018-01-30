@@ -3,7 +3,8 @@ const eventful_api_key  = `G6bFxWDSpqCDTwjr`;                           // Event
 const yt_api_key        = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`;    // YouTube API Key
 const google_places_key = `AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E`;    // Google Places API Key
 
-let timerOn  = false;
+let timerOn    = false;
+let queuedMaps = [];
 
 let sliderLoadedCount = 0;
 
@@ -24,6 +25,7 @@ function sliderMapCallback(){
 function getEvents(q, where, date, results, near) // Gets events from the Eventful API
 {
     timerOn = false;
+    queuedMaps = [];
     $("#results").empty();
 
     // API Query parameters
@@ -142,31 +144,21 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
 
 }
 
-let timeLeft = 2000;
 
-function initializeTimer(){
+function initTimer(){
 
-    if(!timerOn){
-        console.log("TIMER IS ON!")
-        timerOn = true;
-        let newInterval = setInterval(function(){
-            timeLeft -= 100;
-            if(timeLeft < 100){
-                clearInterval(newInterval);
-            }
-        },100);
+    timerOn = true;
+    setTimeout(()=>{
 
-    }
+        while(queuedMaps.length > 0){
+            let func = queuedMaps.shift();
+            func();
+            //console.log(`queuedMaps: ${queuedMaps.length}`);
+        }
 
-}
+        timerOn = false;
 
-function doQueuedFunction(callback){
-
-    initializeTimer();
-    let currentTimeLeft = timeLeft;
-    setTimeout(function(){
-        callback();
-    },currentTimeLeft);
+    },2000);
 }
 
 // Renders a Google Map
@@ -208,28 +200,37 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSli
         infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
 
+        function nearbySearch(){
+            service.nearbySearch({
 
-        service.nearbySearch({
+                location: pyrmont,
+                radius: radius,
+                type: [near]
 
-            location: pyrmont,
-            radius: radius,
-            type: [near]
+            }, function(results,status){
 
-        }, callbackMap);
+                if(status === google.maps.places.PlacesServiceStatus.OK){
+                    callbackMap(results,status);
+                } else if (status !== "ZERO_RESULTS"){
+                    //console.log("Maps don't work");
+                    queuedMaps.push(nearbySearch);
+                    //console.log(`queuedMaps: ${queuedMaps.length}`);
+                    if(!timerOn)
+                        initTimer();
+                }
+
+            });
+        }
+
+        nearbySearch();
 
     }
 
     function callbackMap(results, status) {
 
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
                 createMarker(results[i]);
             }
-        } else {
-
-            console.log("Maps don't work");
-
-        }
     }
 
     function createMarker(place) {
@@ -524,7 +525,7 @@ $(document).ready(function(){
 
     });
 
-    //getEvents("comedy","St Louis","February",10,"parking");
+    getEvents("comedy","St Louis","February",30,"parking");
 
     // Carousel Events
     $("#play").on("click",function(){
@@ -537,8 +538,8 @@ $(document).ready(function(){
         $('.carousel').carousel("pause"); 
     });
 
-    for(let i=0; i<ourPicks.length; ++i){
-      getEventById(ourPicks[i].id,i,ourPicks[i].name,true);
-    }
+    //for(let i=0; i<ourPicks.length; ++i){
+      //getEventById(ourPicks[i].id,i,ourPicks[i].name,true);
+    // /}
 
 });
