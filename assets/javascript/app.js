@@ -20,6 +20,10 @@ function sliderMapCallback(){
 
     }
     
+    $("#slider").addClass("carousel");
+    $('.carousel').carousel({
+            interval: 4000
+    }); 
 }
 
 function getEvents(q, where, date, results, near) // Gets events from the Eventful API
