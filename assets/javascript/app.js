@@ -525,7 +525,7 @@ $(document).ready(function(){
 
     });
 
-    getEvents("comedy","St Louis","February",30,"parking");
+    //getEvents("comedy","St Louis","February",30,"parking");
 
     // Carousel Events
     $("#play").on("click",function(){
@@ -538,8 +538,8 @@ $(document).ready(function(){
         $('.carousel').carousel("pause"); 
     });
 
-    //for(let i=0; i<ourPicks.length; ++i){
-      //getEventById(ourPicks[i].id,i,ourPicks[i].name,true);
-    // /}
+    for(let i=0; i<ourPicks.length; ++i){
+        getEventById(ourPicks[i].id,i,ourPicks[i].name,true);
+    }
 
 });
