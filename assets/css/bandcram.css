@@ -1,5 +1,11 @@
+html {
+  height: 100%;
+}
+
 body {
     padding-top: 8rem;
+    background-color: #eaeced;
+    min-height: 100%;
 }
 
 /*.starter-template {
@@ -111,6 +117,7 @@ hr {
 
 h1 {
     margin-top: 0;
+    margin-bottom: 3px;
 }
 
 .table {
@@ -152,7 +159,17 @@ textarea {
     color: #FFF;
 }
 
+.panel-title {
 
+    font-weight: 300;
+    font-style: italic;
+    baseline-shift: 20px;
+    letter-spacing: 1px;
+}
+
+h3.panel-title{
+    font-weight: 500;
+}
 
 
 /* carousel */
