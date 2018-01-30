@@ -185,6 +185,9 @@ h3.panel-title{
 #navbar-toggly {
     display: none;
 }
+#sliders{
+    position: relative;
+}
 
 .carousel-control.left,
 .carousel-control.right {
@@ -197,9 +200,10 @@ h3.panel-title{
 }
 
 #controls {
+    z-index: 25;
     position: absolute;
-    top: 25px;
-    right: 5px;
+    top: 20px;
+    right: 7px;
     color: grey;
 }
 
