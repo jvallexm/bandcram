@@ -5,6 +5,22 @@ const google_places_key = `AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E`;    // Googl
 
 let timerOn  = false;
 
+let sliderLoadedCount = 0;
+
+function sliderMapCallback(){
+
+    sliderLoadedCount++;
+
+    if(sliderLoadedCount === 4){
+
+        for(let i=0 ; i < 4 ;i++){
+            $("#panel-" + i).appendTo("#carousel");
+        }
+
+    }
+    
+}
+
 function getEvents(q, where, date, results, near) // Gets events from the Eventful API
 {
     timerOn = false;
@@ -120,7 +136,7 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
             search = event.performers.performer.name;
         
         getYouTubeVideo(search, i);
-        getGoogleMap(i, event.latitude, event.longitude, "map-" + i, "parking", 1000, event.postal_code, event.venue_name);
+        getGoogleMap(i, event.latitude, event.longitude, "map-" + i, "parking", 1000, event.postal_code, event.venue_name, true);
 
     });
 
@@ -155,7 +171,7 @@ function doQueuedFunction(callback){
 
 // Renders a Google Map
 
-function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address) {
+function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSlider) {
 
     // Renders the card title for the map
     let nearText = near;
@@ -227,6 +243,12 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address) {
             infowindow.setContent(place.name);
             infowindow.open(map, this);
         });
+
+        if(isSlider){
+            google.maps.event.addListenerOnce(map, 'idle', function(){
+                sliderMapCallback();
+            });
+        }
     }
 
     /* Above from the Google Places API Documentation */
@@ -384,15 +406,9 @@ function renderResult(i,title,desc,header,isSlider){
             topPanel.addClass("active");
 
         // appends the new panel to the carousel
-        $("#carousel").append(topPanel);
+        $("#results").append(topPanel);
 
         // If it's the last one in the list, it turns the carousel on autoplay
-        if(i===3)
-        {
-            $('.carousel').carousel({
-                interval: 4000
-            }); 
-        }
 
     }
     else{
@@ -516,7 +532,7 @@ $(document).ready(function(){
                 interval: 4000
         }); 
     });
-    
+
     $("#pause").on("click",function(){
         $('.carousel').carousel("pause"); 
     });
