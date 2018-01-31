@@ -254,11 +254,14 @@ margin-top: 15px;
 .artist-image {
     float: left;
     margin-right: 7px; 
-    margin-top: 7px;
+    margin-top: 2px;
 }
 
 .circle-image {
     border-radius: 25%;
+    height: 57px;
+    width: 57px;
+
 }
 
 

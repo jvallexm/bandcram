@@ -78,7 +78,7 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
             // Let's get the time and date, the format is YYYY-MM-DD HH:MM:SS
 
-            renderResult(i, event.title, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); // Creates a new panel for each of the returned events
+            renderResult(i, event.title, event.image.medium.url, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); // Creates a new panel for each of the returned events
 
             // console.log(event.title);        // Event Title
             //  console.log(event);              // Event Object
@@ -128,10 +128,18 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
 
         // Events array from api call 
 
-        // console.log(event);
+        console.log(event);
+
+        if (event.images === null)
+            imageIcon = "assets/images/apple-touch-icon-57x57.png";
+        else if (event.images.image[0] !== undefined)
+            imageIcon = event.images.image[0].medium.url;
+        else
+            imageIcon = event.images.image.medium.url;
+
         let eventTime = event.start_time;
         let displayTime = timeFormat(eventTime);
-        renderResult(i, event.title, `${displayTime} ${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code}`,header,isSlider);
+        renderResult(i, event.title, imageIcon, `${displayTime} ${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code}`,header,isSlider);
         let search;
 
         if (event.performers === null)
@@ -356,7 +364,7 @@ function createCol(element, i) {
 
 }
 
-function renderResult(i,title,desc,header,isSlider){
+function renderResult(i,title,imageURL,desc,header,isSlider){
 
   // The panel for each element in the search list
   let panel = newDiv("panel-body");
@@ -365,6 +373,12 @@ function renderResult(i,title,desc,header,isSlider){
     let panelHeader = newDiv("panel-title").text(header);
     panel.append(panelHeader);
   }
+
+    let imageDiv = newDiv("artist-image");
+    let artistImage= $("<img>").attr('src', imageURL).addClass("circle-image");
+
+    imageDiv.append(artistImage);
+    panel.append(imageDiv);
 
   // The title of the panel
   let panelTitle = $("<h1>").text(title);
@@ -439,7 +453,7 @@ const ourPicks = [
     id: "E0-001-106661781-3"
   },{
     name: "Peter's Pick",
-    id: "E0-001-109109643-8"
+    id: "E0-001-108184646-3"
   },{
     name: "Ziad's Pick",
     id: "E0-001-106273043-5"
