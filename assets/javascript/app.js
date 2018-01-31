@@ -1,13 +1,15 @@
 
-const eventful_api_key = `G6bFxWDSpqCDTwjr`;                           // Eventful API Key
-const yt_api_key = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`;    // YouTube API Key
+const eventful_api_key  = `G6bFxWDSpqCDTwjr`;                           // Eventful API Key
+const yt_api_key        = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`;    // YouTube API Key
 const google_places_key = `AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E`;    // Google Places API Key
 
-let timerOn = false;
-let queuedMaps = [];
+// Global Variables
 
-let sliderLoadedCount = 0;
+let timerOn           = false;  // The timer for queued functions
+let queuedMaps        = [];     // The functions queded
+let sliderLoadedCount = 0;      // How many sliders have been loaded on page load
 
+/* Creates a Loading spinner */
 
 function makeLoading(){
 
@@ -15,9 +17,13 @@ function makeLoading(){
     return $("<p>").text("Loading ").append(spinner);
 }
 
+/* Callback function for slider on initial load */
+
 function sliderMapCallback() {
 
-    sliderLoadedCount++;
+    sliderLoadedCount++;  // Increments how many sliders have loaded
+
+    // Once all four sliders have loaded, it adds them to the carousel
 
     if (sliderLoadedCount === 4) {
 
@@ -25,45 +31,48 @@ function sliderMapCallback() {
             $("#panel-" + i).appendTo("#carousel");
         }
 
+        $("#slider").addClass("carousel"); // Adds the carousel class
+
+        $('.carousel').carousel({          // Makes the carousel play
+            interval: 4000
+        });
+
     }
 
-    $("#slider").addClass("carousel");
-    $('.carousel').carousel({
-        interval: 4000
-    });
 }
 
-function getEvents(q, where, date, results, near) // Gets events from the Eventful API
-{
-    timerOn = false;
-    queuedMaps = [];
-    $("#results").empty();
+/* Gets events by searching the Eventful API */
+
+function getEvents(q, where, date, results, near){
+
+    timerOn    = false; // Resets the timer
+    queuedMaps = [];    // Resets the map queue
+
+    $("#results").empty(); // Empties any previous results
 
     // API Query parameters
     var oArgs = {
 
-        app_key: eventful_api_key,
-        q: q,
-        where: where,
-        date: date,
-        page_size: results,
-        sort_order: "popularity",
-        within: 50
+        app_key:    eventful_api_key, // API Key
+        q:          q,                // Search query
+        where:      where,            // Place to search for events near
+        date:       date,             // Time period from which to find events
+        page_size:  results,          // Maximum number of results
+        sort_order: "popularity",     // Sorts results by populatrity
+        within:     50                // Event radius
+
     };
+
+    // Calls from the Eventful API using oArgs as the search 
 
     EVDB.API.call("/events/search", oArgs, function (oData) {
 
-        // Events array from api call 
+        // If no events are found it lets the user know by displaying a newly created error screen
 
-        // console.log(oData);
-
-        // If no events are found
         if (oData.events === null) {
 
-            console.log("We can't find that");
-
-            let nope = newDiv("jumbotron text-center container-fluid");
-            let nopeHeader = $("<h2>").text("Sorry, we couldn't find any events like that :(");
+            let nope          = newDiv("jumbotron text-center container-fluid");
+            let nopeHeader    = $("<h2>").text("Sorry, we couldn't find any events like that :(");
             let nopeSubHeader = $("<h4>").text("Try searching for something else");
 
             nope.append(nopeHeader);
@@ -71,39 +80,34 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
             $("#results").append(nope);
 
-            return false;
+            return false; // Returns after null search 
 
         }
 
-        let eventsArray = oData.events.event;
+        let eventsArray = oData.events.event; // Reference to the events gotten from the API
 
         for (let i = 0; i < eventsArray.length; ++i) {
 
-            let event = eventsArray[i]; //The current event
-            let eventTime = event.start_time;
-            let displayTime = timeFormat(eventTime);
+            let event       = eventsArray[i];        // Reference to the current event
+            let eventTime   = event.start_time;      // Reference to the event start time
+            let displayTime = timeFormat(eventTime); // Converts the start time to a readable format
 
-            // Let's get the time and date, the format is YYYY-MM-DD HH:MM:SS
+            // Creates a new panel for each of the returned events
 
-
-            renderResult(i, event.title, event.image.medium.url, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); // Creates a new panel for each of the returned events
-
-            // console.log(event.title);        // Event Title
-            //  console.log(event);              // Event Object
-            // console.log(event.performers);   // Event performers
+            renderResult(i, event.title, event.image.medium.url, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); 
 
             let search;  // Variable for YouTube Search
 
             // Sets the search variable based on the event data returned
 
-            if (event.performers === null)
+            if (event.performers === null)                        // If no performers are listed
                 search = event.title;
 
-            else if (event.performers.performer[0] !== undefined)
+            else if (event.performers.performer[0] !== undefined) // If multiple performers are listed
                 search = event.performers.performer[0].name;
 
-            else
-                search = event.performers.performer.name;
+            else                                                  // if only one performer is listed 
+                search = event.performers.performer.name;         
       
             // Renders a YouTube video based on the search and index i 
             setEventPlaceHolder(i, event.title, event.venue_name, displayTime, event.postal_code);
@@ -175,7 +179,9 @@ function setEventPlaceHolder(i, title, venue, time, postalCode)
     })
 }
 
-function getEventById(id, i, header, isSlider) // Gets events from the Eventful API
+// Gets single events from the Eventful API for the slider
+
+function getEventById(id, i, header, isSlider) 
 {
 
     // API Query parameters
@@ -201,7 +207,7 @@ function getEventById(id, i, header, isSlider) // Gets events from the Eventful 
         else
             imageIcon = event.images.image.medium.url;
 
-        let eventTime = event.start_time;
+        let eventTime   = event.start_time;
         let displayTime = timeFormat(eventTime);
 
         renderResult(i, event.title, imageIcon, `${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`,header,isSlider);
@@ -223,19 +229,21 @@ function getEventById(id, i, header, isSlider) // Gets events from the Eventful 
 
 }
 
+// Function for when we hit the per second search limit for Google Maps when rendering markers
 
 function initTimer() {
 
-    timerOn = true;
-    setTimeout(() => {
+    timerOn = true;    // Turns the global timer on
+
+    setTimeout(() => { // After 2 seconds, it will itterate through the queue of maps to be rendered and run them
 
         while (queuedMaps.length > 0) {
-            let func = queuedMaps.shift();
-            func();
-            //console.log(`queuedMaps: ${queuedMaps.length}`);
+
+            let func = queuedMaps.shift(); // Function queued
+            func();                        // Runs the queued function
         }
 
-        timerOn = false;
+        timerOn = false; // Once it's done, it turns the timer off
 
     }, 2000);
 }
@@ -278,32 +286,39 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSli
         infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
 
+        // Searches for nearby based on function parameters
+
         function nearbySearch() {
             service.nearbySearch({
 
-                location: pyrmont,
-                radius: radius,
-                type: [near]
+                location: pyrmont, // Location of event
+                radius:   radius,  // How far to search
+                type:     [near]   // What nearby to return results for 
 
             }, function (results, status) {
 
-                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {     // If the status is OK, it renders markers
+
                     $("#map-title-" + i).text(`${nearText} within ${radius}M`);
                     callbackMap(results, status);
-                } else if (status !== "ZERO_RESULTS") {
-                    //console.log("Maps don't work");
-                    queuedMaps.push(nearbySearch);
-                    //console.log(`queuedMaps: ${queuedMaps.length}`);
-                    if (!timerOn)
+
+                } else if (status !== "ZERO_RESULTS") {  // If the status isn't zero results and isn't OK
+
+                    queuedMaps.push(nearbySearch); // Adds this function to the maps queue
+
+                    if (!timerOn)    // If the timer isn't already on it initializes the timer
                         initTimer();
-                } else {
-                    $("#map-title-" + i).text(`No ${nearText} Results :(`);
+
+                } else { // If there are no results found it appends it to the card title
+
+                    $("#map-title-" + i).text(`No ${nearText} Results Found :(`);
+
                 }
 
             });
         }
 
-        nearbySearch();
+        nearbySearch(); // Runs the nearby search
 
     }
 
@@ -325,6 +340,8 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSli
             infowindow.setContent(place.name);
             infowindow.open(map, this);
         });
+
+        /* if this is a Slider, when it finishes loading it calls the slider callback function */
 
         if (isSlider) {
             google.maps.event.addListenerOnce(map, 'idle', function () {
