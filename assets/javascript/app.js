@@ -78,7 +78,7 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
             // Let's get the time and date, the format is YYYY-MM-DD HH:MM:SS
 
-            renderResult(i, event.title, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); // Creates a new panel for each of the returned events
+            renderResult(i, event.title, `${event.venue_name} -- ${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code}`); // Creates a new panel for each of the returned events
 
             // console.log(event.title);        // Event Title
             //  console.log(event);              // Event Object
@@ -96,6 +96,9 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
             else
                 search = event.performers.performer.name;
+      
+            // Renders a YouTube video based on the search and index i 
+            setEventPlaceHolder(i, event.title, event.venue_name, displayTime, event.postal_code);
 
             // Renders a YouTube video based on the search and index i 
             getYouTubeVideo(search, i);
@@ -109,6 +112,59 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
     });
 
+}
+
+function setEventPlaceHolder(i, title, venue, time, postalCode)
+{
+    var div = $("<div/>");
+    div.css({
+        "width" : "600px",
+        "border" : "transparent",
+        "margin" : "20px",
+        "font-size" : "18px",
+        "font-family": "Arial, Helvetica, sans-serif",
+        "font-weight" : "bold",
+        "color" : "blue"
+    });
+    var datetime = time.split(",");
+    var day = $("<h4>");
+    var time = $("<h4>");
+    day.text(datetime[0] + "-" + datetime[1]);
+    time.text(datetime[2]);
+    div.append(day);
+    div.append(time); 
+    //div.text(venue + "\n" + time);
+    div.appendTo($("#ph-" + i));
+
+    $.ajax({
+        url: 'https://app.ticketmaster.com/discovery/v2/events.json?apikey=QR6TCULKNJlCHH4Fnx81eS9JvBqjzr0c&keyword=' + title + '&' + 'postalCode=' + postalCode,
+        datatype: "json",
+        success: function (e) {;
+            console.log(e);
+            if (e._embedded !== undefined) {
+                if (e._embedded.events !== undefined) {
+                    console.log(e._embedded.events[0].url);
+                    let url = e._embedded.events[0].url;
+                    /* if (e._embedded.events[0].priceRanges !== undefined) {
+                        console.log(e._embedded.events[0].priceRanges[0].max);
+                        console.log(e._embedded.events[0].priceRanges[0].min);
+                    } */
+                    let link = $("<a>").attr("href", url)
+                        .attr("target", "_blank")
+                        .text("Buy Tickets →");
+
+                    $("#ph-title-" + i).empty();
+                    $("#ph-title-" + i).append(link);
+                }
+                else {
+                    $("#ph-title-" + i).text("No Information on tickets");
+                }
+            }
+            else{
+                $("#ph-title-" + i).text("No Information on tickets"); 
+            }
+        }
+    })
 }
 
 function getEventById(id, i, header, isSlider) // Gets events from the Eventful API
@@ -131,7 +187,9 @@ function getEventById(id, i, header, isSlider) // Gets events from the Eventful 
         // console.log(event);
         let eventTime = event.start_time;
         let displayTime = timeFormat(eventTime);
-        renderResult(i, event.title, `${displayTime} ${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code}`, header, isSlider);
+
+        renderResult(i, event.title, `${event.venue_name} -- ${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code}`,header,isSlider);
+
         let search;
 
         if (event.performers === null)
@@ -140,7 +198,8 @@ function getEventById(id, i, header, isSlider) // Gets events from the Eventful 
             search = event.performers.performer[0].name;
         else
             search = event.performers.performer.name;
-
+        
+        setEventPlaceHolder(i, event.title, event.venue_name, displayTime, event.postal_code);
         getYouTubeVideo(search, i);
         getGoogleMap(i, event.latitude, event.longitude, "map-" + i, "parking", 1000, event.postal_code, event.venue_name, true);
 
@@ -180,7 +239,7 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSli
     };
 
     $("#map-title-" + i).text(`${nearText} within ${radius}M`);
-    $("#ph-title-" + i).text(address);
+    //$("#ph-title-" + i).text(address);
 
     /* Below from the Google Places API Documentation */
 
