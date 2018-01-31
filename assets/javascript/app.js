@@ -536,7 +536,7 @@ function renderResult(i,title,imageURL,desc,header,isSlider){
         // If the index is 0, it sets it to be the first one displayed
         if (i === 0){
             topPanel.addClass("active");
-            $("#sliders").append(topPanel);
+            $("#carousel").append(topPanel);
         } else {
 
         // appends the new panel to the carousel
