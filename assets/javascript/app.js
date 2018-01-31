@@ -1,29 +1,29 @@
 
-const eventful_api_key  = `G6bFxWDSpqCDTwjr`;                           // Eventful API Key
-const yt_api_key        = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`;    // YouTube API Key
+const eventful_api_key = `G6bFxWDSpqCDTwjr`;                           // Eventful API Key
+const yt_api_key = `AIzaSyA07NHdSXAhv8cLIyND8qsb4Uvwt0-DVgE`;    // YouTube API Key
 const google_places_key = `AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E`;    // Google Places API Key
 
-let timerOn    = false;
+let timerOn = false;
 let queuedMaps = [];
 
 let sliderLoadedCount = 0;
 
-function sliderMapCallback(){
+function sliderMapCallback() {
 
     sliderLoadedCount++;
 
-    if(sliderLoadedCount === 4){
+    if (sliderLoadedCount === 4) {
 
-        for(let i=0 ; i < 4 ;i++){
+        for (let i = 0; i < 4; i++) {
             $("#panel-" + i).appendTo("#carousel");
         }
 
     }
-    
+
     $("#slider").addClass("carousel");
     $('.carousel').carousel({
-            interval: 4000
-    }); 
+        interval: 4000
+    });
 }
 
 function getEvents(q, where, date, results, near) // Gets events from the Eventful API
@@ -51,12 +51,12 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
         // console.log(oData);
 
         // If no events are found
-        if(oData.events===null){
+        if (oData.events === null) {
 
             console.log("We can't find that");
 
-            let nope          = newDiv("jumbotron text-center container-fluid");
-            let nopeHeader    = $("<h2>").text("Sorry, we couldn't find any events like that :(");
+            let nope = newDiv("jumbotron text-center container-fluid");
+            let nopeHeader = $("<h2>").text("Sorry, we couldn't find any events like that :(");
             let nopeSubHeader = $("<h4>").text("Try searching for something else");
 
             nope.append(nopeHeader);
@@ -72,13 +72,13 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
         for (let i = 0; i < eventsArray.length; ++i) {
 
-            let event       = eventsArray[i]; //The current event
-            let eventTime   = event.start_time;
+            let event = eventsArray[i]; //The current event
+            let eventTime = event.start_time;
             let displayTime = timeFormat(eventTime);
 
             // Let's get the time and date, the format is YYYY-MM-DD HH:MM:SS
 
-            renderResult(i, event.title, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); // Creates a new panel for each of the returned events
+            renderResult(i, event.title, `${event.venue_name} -- ${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code}`); // Creates a new panel for each of the returned events
 
             // console.log(event.title);        // Event Title
             //  console.log(event);              // Event Object
@@ -96,7 +96,10 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
             else
                 search = event.performers.performer.name;
-           
+      
+            // Renders a YouTube video based on the search and index i 
+            setEventPlaceHolder(i, event.title, event.venue_name, displayTime, event.postal_code);
+
             // Renders a YouTube video based on the search and index i 
             getYouTubeVideo(search, i);
 
@@ -111,7 +114,60 @@ function getEvents(q, where, date, results, near) // Gets events from the Eventf
 
 }
 
-function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
+function setEventPlaceHolder(i, title, venue, time, postalCode)
+{
+    var div = $("<div/>");
+    div.css({
+        "width" : "600px",
+        "border" : "transparent",
+        "margin" : "20px",
+        "font-size" : "18px",
+        "font-family": "Arial, Helvetica, sans-serif",
+        "font-weight" : "bold",
+        "color" : "blue"
+    });
+    var datetime = time.split(",");
+    var day = $("<h4>");
+    var time = $("<h4>");
+    day.text(datetime[0] + "-" + datetime[1]);
+    time.text(datetime[2]);
+    div.append(day);
+    div.append(time); 
+    //div.text(venue + "\n" + time);
+    div.appendTo($("#ph-" + i));
+
+    $.ajax({
+        url: 'https://app.ticketmaster.com/discovery/v2/events.json?apikey=QR6TCULKNJlCHH4Fnx81eS9JvBqjzr0c&keyword=' + title + '&' + 'postalCode=' + postalCode,
+        datatype: "json",
+        success: function (e) {;
+            console.log(e);
+            if (e._embedded !== undefined) {
+                if (e._embedded.events !== undefined) {
+                    console.log(e._embedded.events[0].url);
+                    let url = e._embedded.events[0].url;
+                    /* if (e._embedded.events[0].priceRanges !== undefined) {
+                        console.log(e._embedded.events[0].priceRanges[0].max);
+                        console.log(e._embedded.events[0].priceRanges[0].min);
+                    } */
+                    let link = $("<a>").attr("href", url)
+                        .attr("target", "_blank")
+                        .text("Buy Tickets →");
+
+                    $("#ph-title-" + i).empty();
+                    $("#ph-title-" + i).append(link);
+                }
+                else {
+                    $("#ph-title-" + i).text("No Information on tickets");
+                }
+            }
+            else{
+                $("#ph-title-" + i).text("No Information on tickets"); 
+            }
+        }
+    })
+}
+
+function getEventById(id, i, header, isSlider) // Gets events from the Eventful API
 {
 
     // API Query parameters
@@ -131,7 +187,9 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
         // console.log(event);
         let eventTime = event.start_time;
         let displayTime = timeFormat(eventTime);
-        renderResult(i, event.title, `${displayTime} ${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code}`,header,isSlider);
+
+        renderResult(i, event.title, `${event.venue_name} -- ${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code}`,header,isSlider);
+
         let search;
 
         if (event.performers === null)
@@ -141,6 +199,7 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
         else
             search = event.performers.performer.name;
         
+        setEventPlaceHolder(i, event.title, event.venue_name, displayTime, event.postal_code);
         getYouTubeVideo(search, i);
         getGoogleMap(i, event.latitude, event.longitude, "map-" + i, "parking", 1000, event.postal_code, event.venue_name, true);
 
@@ -149,12 +208,12 @@ function getEventById(id,i,header,isSlider) // Gets events from the Eventful API
 }
 
 
-function initTimer(){
+function initTimer() {
 
     timerOn = true;
-    setTimeout(()=>{
+    setTimeout(() => {
 
-        while(queuedMaps.length > 0){
+        while (queuedMaps.length > 0) {
             let func = queuedMaps.shift();
             func();
             //console.log(`queuedMaps: ${queuedMaps.length}`);
@@ -162,7 +221,7 @@ function initTimer(){
 
         timerOn = false;
 
-    },2000);
+    }, 2000);
 }
 
 // Renders a Google Map
@@ -172,15 +231,15 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSli
     // Renders the card title for the map
     let nearText = near;
 
-    if(near == "restaurant"){
+    if (near == "restaurant") {
         nearText = "Restaurants";
-    } 
-    else if (near == "parking"){
+    }
+    else if (near == "parking") {
         nearText = "Parking";
     };
 
     $("#map-title-" + i).text(`${nearText} within ${radius}M`);
-    $("#ph-title-" + i).text(address);
+    //$("#ph-title-" + i).text(address);
 
     /* Below from the Google Places API Documentation */
 
@@ -204,22 +263,22 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSli
         infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
 
-        function nearbySearch(){
+        function nearbySearch() {
             service.nearbySearch({
 
                 location: pyrmont,
                 radius: radius,
                 type: [near]
 
-            }, function(results,status){
+            }, function (results, status) {
 
-                if(status === google.maps.places.PlacesServiceStatus.OK){
-                    callbackMap(results,status);
-                } else if (status !== "ZERO_RESULTS"){
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    callbackMap(results, status);
+                } else if (status !== "ZERO_RESULTS") {
                     //console.log("Maps don't work");
                     queuedMaps.push(nearbySearch);
                     //console.log(`queuedMaps: ${queuedMaps.length}`);
-                    if(!timerOn)
+                    if (!timerOn)
                         initTimer();
                 }
 
@@ -232,9 +291,9 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSli
 
     function callbackMap(results, status) {
 
-            for (var i = 0; i < results.length; i++) {
-                createMarker(results[i]);
-            }
+        for (var i = 0; i < results.length; i++) {
+            createMarker(results[i]);
+        }
     }
 
     function createMarker(place) {
@@ -249,8 +308,8 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSli
             infowindow.open(map, this);
         });
 
-        if(isSlider){
-            google.maps.event.addListenerOnce(map, 'idle', function(){
+        if (isSlider) {
+            google.maps.event.addListenerOnce(map, 'idle', function () {
                 sliderMapCallback();
             });
         }
@@ -287,14 +346,14 @@ function getYouTubeVideo(q, i) {
             }
             else {
 
-                let link = $("<a>").attr("href","https://www.youtube.com/results?search_query=" + q)
-                                   .attr("target","_blank")
-                                   .text("Watch More →");
+                let link = $("<a>").attr("href", "https://www.youtube.com/results?search_query=" + q)
+                    .attr("target", "_blank")
+                    .text("Watch More →");
 
                 $("#video-title-" + i).empty();
                 $("#video-title-" + i).append(link);
                 $("<iframe>").attr("src", "https://www.youtube.com/embed/" + data.items[0].id.videoId)
-                             .attr("frameborder", "0").appendTo("#video-" + i);
+                    .attr("frameborder", "0").appendTo("#video-" + i);
 
             }
         });
@@ -356,18 +415,18 @@ function createCol(element, i) {
 
 }
 
-function renderResult(i,title,desc,header,isSlider){
+function renderResult(i, title, desc, header, isSlider) {
 
-  // The panel for each element in the search list
-  let panel = newDiv("panel-body");
+    // The panel for each element in the search list
+    let panel = newDiv("panel-body");
 
-  if(header !== undefined){
-    let panelHeader = newDiv("panel-title").text(header);
-    panel.append(panelHeader);
-  }
+    if (header !== undefined) {
+        let panelHeader = newDiv("panel-title").text(header);
+        panel.append(panelHeader);
+    }
 
-  // The title of the panel
-  let panelTitle = $("<h1>").text(title);
+    // The title of the panel
+    let panelTitle = $("<h1>").text(title);
 
     // The subtitle of the panel
     let panelDesc = $("<p>").text(desc);
@@ -396,18 +455,18 @@ function renderResult(i,title,desc,header,isSlider){
 
     panel.append(row);
 
-    let topPanel = newDiv("panel panel-default").attr("id","panel-" + i);
+    let topPanel = newDiv("panel panel-default").attr("id", "panel-" + i);
 
     topPanel.append(panel);
 
     // If the items are sliders
-    if(isSlider){
+    if (isSlider) {
 
         // Adds the item class so that the divs spin in the carousel
         topPanel.addClass("item");
 
         // If the index is 0, it sets it to be the first one displayed
-        if(i===0)
+        if (i === 0)
             topPanel.addClass("active");
 
         // appends the new panel to the carousel
@@ -416,7 +475,7 @@ function renderResult(i,title,desc,header,isSlider){
         // If it's the last one in the list, it turns the carousel on autoplay
 
     }
-    else{
+    else {
         // Appends the new panel to the results div
         $("#results").append(topPanel);
     }
@@ -434,50 +493,49 @@ function timeFormat(eventTime) {
 
 const ourPicks = [
 
-  { 
-    name: "David's Pick",
-    id: "E0-001-106661781-3"
-  },{
-    name: "Peter's Pick",
-    id: "E0-001-109109643-8"
-  },{
-    name: "Ziad's Pick",
-    id: "E0-001-106273043-5"
-  },{
-    name: "Jen's Pick",
-    id: "E0-001-109918478-4"
-  }
+    {
+        name: "David's Pick",
+        id: "E0-001-106661781-3"
+    }, {
+        name: "Peter's Pick",
+        id: "E0-001-109109643-8"
+    }, {
+        name: "Ziad's Pick",
+        id: "E0-001-106273043-5"
+    }, {
+        name: "Jen's Pick",
+        id: "E0-001-109918478-4"
+    }
 
 ];
 
 
-$(document).ready(function(){
+$(document).ready(function () {
 
     let myLat;
     let myLon;
     let initialSearch = true;
 
-    if(navigator.geolocation) 
-    {
-       navigator.geolocation.getCurrentPosition(function(position){
-    
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+
             myLat = position.coords.latitude;
             myLon = position.coords.longitude;
-       });  
+        });
     }
-    
-    
-    $("#user-search-1, #user-search-2").submit(function( event ) {
+
+
+    $("#user-search-1, #user-search-2").submit(function (event) {
 
         event.preventDefault();
 
-        let thisForm       = this.id.split("-")[2];
-        let artistSearch   = $("#input-artist-" + thisForm).val().trim();
+        let thisForm = this.id.split("-")[2];
+        let artistSearch = $("#input-artist-" + thisForm).val().trim();
         let locationSearch = $("#input-location-" + thisForm).val().trim();
-        let whenSearch     = $("#input-date-" + thisForm).val().trim();
-        let nearbySearch   = $("#input-nearby-venue-" + thisForm).val().trim();
-        let resultsSearch  = $("#input-results-" + thisForm).val().trim();
-        
+        let whenSearch = $("#input-date-" + thisForm).val().trim();
+        let nearbySearch = $("#input-nearby-venue-" + thisForm).val().trim();
+        let resultsSearch = $("#input-results-" + thisForm).val().trim();
+
         let searchTime;
 
         if (whenSearch == 1) {
@@ -486,7 +544,7 @@ $(document).ready(function(){
 
         } else if (whenSearch == 2) {
 
-            searchTime = "Next Week"
+            searchTime = "Next Week";
 
         } else if (whenSearch == 3) {
 
@@ -500,25 +558,63 @@ $(document).ready(function(){
 
         if (locationSearch == "Near Me" || locationSearch == "") {
 
-           locationSearch = `${myLat}, ${myLon}`;
+            locationSearch = `${myLat}, ${myLon}`;
 
         };
 
+
         /** Data validation goes here **/
+        if (artistSearch.length > 30) {
+            $("#long-name").remove();
+            $("#long-loc").remove(); 
+            let nameTooLong = newDiv("text-center container-fluid");
+            let tooLongHeader = $("<p>").css("color", "red").attr("id", "long-name").text("Please enter a proper band name, genre, or event of interest");
+
+            nameTooLong.append(tooLongHeader);
+
+            $("#results").prepend(nameTooLong);
+            return false;
+        }
+        else if (locationSearch.length > 40) {
+            //remove(); element with id created in longLocationHeader
+            $("#long-loc").remove(); 
+            $("#long-name").remove();
+            let locationTooLong = newDiv("text-center container-fluid");
+            let longLocationHeader = $("<p>").css("color", "red").attr("id", "long-loc").text("Please enter a proper location name, zip code, city, or geolocation coordinate");
+
+            locationTooLong.append(longLocationHeader);
+
+            $("#results").append(locationTooLong);
+            return false;
+        } else if(artistSearch == "" && locationSearch.length > 40) {
+            $("#long-loc").remove(); 
+            $("#long-name").remove();
+            let locationTooLong = newDiv("text-center container-fluid");
+            let longLocationHeader = $("<p>").css("color", "red").attr("id", "long-loc").text("Please enter a proper location name, zip code, city, or geolocation coordinate");
+
+            locationTooLong.append(longLocationHeader);
+
+            $("#results").append(locationTooLong);
+            return false;
+        }
+        else {
+            $("#long-loc").remove();
+            $("#long-name").remove();
+            getEvents(artistSearch, locationSearch, searchTime, resultsSearch, nearbySearch);
+        };
+
         
-        getEvents(artistSearch, locationSearch, searchTime, resultsSearch, nearbySearch);
-       
-        if(initialSearch){
+        if (initialSearch) {
 
             // Hides the main search bar
-            $(".first-search-row").css("display","none");
-            $("#user-search-1").css("display","inline");
-            $("#navbar-toggly").css("display","inline");
+            $(".first-search-row").css("display", "none");
+            $("#user-search-1").css("display", "inline");
+            $("#navbar-toggly").css("display", "inline");
 
             //Stops the running carousel and empties the sliders div
-            $('.carousel').carousel("pause"); 
+            $('.carousel').carousel("pause");
             $("#sliders").empty();
-            $("#sliders").css("display","none");
+            $("#sliders").css("display", "none");
 
             // Makes sure this method only runs once!
             initialSearch = false;
@@ -532,14 +628,14 @@ $(document).ready(function(){
     //getEvents("comedy","St Louis","February",30,"parking");
 
     // Carousel Events
-    $("#play").on("click",function(){
+    $("#play").on("click", function () {
         $('.carousel').carousel({
-                interval: 4000
-        }); 
+            interval: 4000
+        });
     });
 
-    $("#pause").on("click",function(){
-        $('.carousel').carousel("pause"); 
+    $("#pause").on("click", function () {
+        $('.carousel').carousel("pause");
     });
 
     $("#carousel").removeClass("carousel");
