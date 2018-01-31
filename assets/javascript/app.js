@@ -27,7 +27,7 @@ function sliderMapCallback() {
 
     if (sliderLoadedCount === 4) {
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 1; i < 4; i++) {
             $("#panel-" + i).appendTo("#carousel");
         }
 
@@ -37,6 +37,20 @@ function sliderMapCallback() {
 
     }
 
+}
+
+/* Makes a new nope div */
+
+function makeNope(h2,h4){
+
+    let nope          = newDiv("jumbotron text-center container-fluid");
+    let nopeHeader    = $("<h2>").text(h2);
+    let nopeSubHeader = $("<h4>").text(h4);
+
+    nope.append(nopeHeader);
+    nope.append(nopeSubHeader);
+
+    $("#results").append(nope);
 }
 
 /* Gets events by searching the Eventful API */
@@ -69,20 +83,16 @@ function getEvents(q, where, date, results, near){
 
         if (oData.events === null) {
 
-            let nope          = newDiv("jumbotron text-center container-fluid");
-            let nopeHeader    = $("<h2>").text("Sorry, we couldn't find any events like that :(");
-            let nopeSubHeader = $("<h4>").text("Try searching for something else");
 
-            nope.append(nopeHeader);
-            nope.append(nopeSubHeader);
-
-            $("#results").append(nope);
-
+            makeNope("Sorry, we couldn't find any events like that :(","Try searching for something else");
             return false; // Returns after null search 
 
         }
 
         let eventsArray = oData.events.event; // Reference to the events gotten from the API
+
+        console.log(`Events array ${eventsArray.length} Results ${results}`);
+
 
         for (let i = 0; i < eventsArray.length; ++i) {
 
@@ -92,7 +102,12 @@ function getEvents(q, where, date, results, near){
 
             // Creates a new panel for each of the returned events
 
-            renderResult(i, event.title, event.image.medium.url, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); 
+            let image = "BAD_URL";
+            
+            if(event.image !== null)
+                image = event.image.medium.url;
+
+            renderResult(i, event.title, image, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); 
 
             let search;  // Variable for YouTube Search
 
@@ -118,6 +133,11 @@ function getEvents(q, where, date, results, near){
             getGoogleMap(i, event.latitude, event.longitude, "map-" + i, near, 1000, event.postal_code, event.venue_name);
 
 
+        }
+
+        if(eventsArray.length < results){
+            console.log("results not enough");
+            makeNope(`Sorry, we could only find ${eventsArray.length} events`,"Try searching for something else");
         }
 
     });
@@ -514,11 +534,14 @@ function renderResult(i,title,imageURL,desc,header,isSlider){
         topPanel.addClass("item");
 
         // If the index is 0, it sets it to be the first one displayed
-        if (i === 0)
+        if (i === 0){
             topPanel.addClass("active");
+            $("#sliders").append(topPanel);
+        } else {
 
         // appends the new panel to the carousel
-        $("#results").append(topPanel);
+            $("#results").append(topPanel);
+        }    
 
         // If it's the last one in the list, it turns the carousel on autoplay
 
