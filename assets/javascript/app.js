@@ -360,7 +360,7 @@ function getYouTubeVideo(q, i) {
 
 }
 
-// Returns a div with the classes passed as a parameter
+// Returns a div with the classes passed as a parameter .
 
 function newDiv(addClass) {
 
@@ -575,14 +575,18 @@ $(document).ready(function () {
             $("#results").prepend(nameTooLong);
             return false;
         }
-        else {
-            $("#long-name").remove();
-            $("#long-loc").remove(); 
-            getEvents(artistSearch, locationSearch, searchTime, resultsSearch, nearbySearch);
-        };
-
-        if (locationSearch.length > 40) {
+        else if (locationSearch.length > 40) {
             //remove(); element with id created in longLocationHeader
+            $("#long-loc").remove(); 
+            $("#long-name").remove();
+            let locationTooLong = newDiv("text-center container-fluid");
+            let longLocationHeader = $("<p>").css("color", "red").attr("id", "long-loc").text("Please enter a proper location name, zip code, city, or geolocation coordinate");
+
+            locationTooLong.append(longLocationHeader);
+
+            $("#results").append(locationTooLong);
+            return false;
+        } else if(artistSearch == "" && locationSearch.length > 40) {
             $("#long-loc").remove(); 
             $("#long-name").remove();
             let locationTooLong = newDiv("text-center container-fluid");
@@ -599,17 +603,7 @@ $(document).ready(function () {
             getEvents(artistSearch, locationSearch, searchTime, resultsSearch, nearbySearch);
         };
 
-        if(artistSearch == "" && locationSearch.length > 40) {
-            $("#long-loc").remove(); 
-            $("#long-name").remove();
-            let locationTooLong = newDiv("text-center container-fluid");
-            let longLocationHeader = $("<p>").css("color", "red").attr("id", "long-loc").text("Please enter a proper location name, zip code, city, or geolocation coordinate");
-
-            locationTooLong.append(longLocationHeader);
-
-            $("#results").append(locationTooLong);
-            return false;
-        }
+        
         if (initialSearch) {
 
             // Hides the main search bar
@@ -644,8 +638,10 @@ $(document).ready(function () {
         $('.carousel').carousel("pause");
     });
 
-    for (let i = 0; i < ourPicks.length; ++i) {
-        getEventById(ourPicks[i].id, i, ourPicks[i].name, true);
+    $("#carousel").removeClass("carousel");
+
+    for(let i=0; i<ourPicks.length; ++i){
+        getEventById(ourPicks[i].id,i,ourPicks[i].name,true);
     }
 
 });
