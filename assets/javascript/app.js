@@ -31,8 +31,6 @@ function sliderMapCallback() {
             $("#panel-" + i).appendTo("#carousel");
         }
 
-        $("#slider").addClass("carousel"); // Adds the carousel class
-
         $('.carousel').carousel({          // Makes the carousel play
             interval: 4000
         });
@@ -516,14 +514,11 @@ function renderResult(i,title,imageURL,desc,header,isSlider){
         topPanel.addClass("item");
 
         // If the index is 0, it sets it to be the first one displayed
-        if (i === 0){
+        if (i === 0)
             topPanel.addClass("active");
-            $("#sliders").append(topPanel)
-        } else {
 
         // appends the new panel to the carousel
-           $("#results").append(topPanel);
-        }
+        $("#results").append(topPanel);
 
         // If it's the last one in the list, it turns the carousel on autoplay
 
@@ -582,12 +577,12 @@ $(document).ready(function () {
 
         event.preventDefault();
 
-        let thisForm       = this.id.split("-")[2];
-        let artistSearch   = $("#input-artist-" + thisForm).val().trim();
+        let thisForm = this.id.split("-")[2];
+        let artistSearch = $("#input-artist-" + thisForm).val().trim();
         let locationSearch = $("#input-location-" + thisForm).val().trim();
-        let whenSearch     = $("#input-date-" + thisForm).val().trim();
-        let nearbySearch   = $("#input-nearby-venue-" + thisForm).val().trim();
-        let resultsSearch  = $("#input-results-" + thisForm).val().trim();
+        let whenSearch = $("#input-date-" + thisForm).val().trim();
+        let nearbySearch = $("#input-nearby-venue-" + thisForm).val().trim();
+        let resultsSearch = $("#input-results-" + thisForm).val().trim();
 
         let searchTime;
 
