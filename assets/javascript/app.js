@@ -8,6 +8,13 @@ let queuedMaps = [];
 
 let sliderLoadedCount = 0;
 
+
+function makeLoading(){
+
+    let spinner = $("<i>").addClass("fa fa-spinner fa-spin");
+    return $("<p>").text("Loading ").append(spinner);
+}
+
 function sliderMapCallback() {
 
     sliderLoadedCount++;
@@ -197,7 +204,7 @@ function getEventById(id, i, header, isSlider) // Gets events from the Eventful 
         let eventTime = event.start_time;
         let displayTime = timeFormat(eventTime);
 
-        renderResult(i, event.title, imageIcon, `${displayTime} ${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code}`,header,isSlider);
+        renderResult(i, event.title, imageIcon, `${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`,header,isSlider);
 
         let search;
 
@@ -247,7 +254,6 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSli
         nearText = "Parking";
     };
 
-    $("#map-title-" + i).text(`${nearText} within ${radius}M`);
     //$("#ph-title-" + i).text(address);
 
     /* Below from the Google Places API Documentation */
@@ -282,6 +288,7 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSli
             }, function (results, status) {
 
                 if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    $("#map-title-" + i).text(`${nearText} within ${radius}M`);
                     callbackMap(results, status);
                 } else if (status !== "ZERO_RESULTS") {
                     //console.log("Maps don't work");
@@ -289,6 +296,8 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSli
                     //console.log(`queuedMaps: ${queuedMaps.length}`);
                     if (!timerOn)
                         initTimer();
+                } else {
+                    $("#map-title-" + i).text(`No ${nearText} Results :(`);
                 }
 
             });
@@ -396,9 +405,11 @@ function createCol(element, i) {
 
     // Where the title of the element is rendered
 
+    let loading = makeLoading();
+
     let cardTitle = newSpan("card-title")
         .attr("id", element + "-title-" + i)
-        .text("Loading...");
+        .append(loading);
 
     /* Below are CSS styles from the BandCram template */
 
@@ -435,8 +446,14 @@ function renderResult(i,title,imageURL,desc,header,isSlider){
         panel.append(panelHeader);
     }
   
-    let imageDiv = newDiv("artist-image");
-    let artistImage= $("<img>").attr('src', imageURL).addClass("circle-image");
+    let imageDiv = newDiv("artist-image").attr("id", "th-" + i);
+    let artistImage= $("<img>").attr('src', imageURL)
+                               .addClass("circle-image")
+                               .on("error",function(){
+                                    console.log("image broke");
+                                    $("#th-" + i).remove();
+                               });
+
 
     imageDiv.append(artistImage);
     panel.append(imageDiv);
@@ -520,7 +537,7 @@ const ourPicks = [
     id: "E0-001-106273043-5"
   },{
     name: "Jen's Pick",
-    id: "E0-001-109918478-4"
+    id: "E0-001-110566547-2"
   }
 
 ];
@@ -578,63 +595,55 @@ $(document).ready(function () {
 
         };
 
+        $("#error").remove();
+
+        function throwError(text){
+
+            let error     = newDiv("text-center container-fluid").attr("id","error");
+            let errorText = $("<p>").css("color","red").text(text);
+            error.append(errorText);
+            $("#results").prepend(error);
+
+        }
 
         /** Data validation goes here **/
         if (artistSearch.length > 30) {
-            $("#long-name").remove();
-            $("#long-loc").remove(); 
-            let nameTooLong = newDiv("text-center container-fluid");
-            let tooLongHeader = $("<p>").css("color", "red").attr("id", "long-name").text("Please enter a proper band name, genre, or event of interest");
+            
+            throwError("Sorry, search names can't be more than 30 characters");
 
-            nameTooLong.append(tooLongHeader);
-
-            $("#results").prepend(nameTooLong);
-            return false;
-        }
-        else if (locationSearch.length > 40) {
+        } else if (locationSearch.length > 40) {
             //remove(); element with id created in longLocationHeader
-            $("#long-loc").remove(); 
-            $("#long-name").remove();
-            let locationTooLong = newDiv("text-center container-fluid");
-            let longLocationHeader = $("<p>").css("color", "red").attr("id", "long-loc").text("Please enter a proper location name, zip code, city, or geolocation coordinate");
 
-            locationTooLong.append(longLocationHeader);
+            throwError("Sorry, please limit locations to 40 or fewer characters");
 
-            $("#results").append(locationTooLong);
-            return false;
         } else if(artistSearch == "" && locationSearch.length > 40) {
-            $("#long-loc").remove(); 
-            $("#long-name").remove();
-            let locationTooLong = newDiv("text-center container-fluid");
-            let longLocationHeader = $("<p>").css("color", "red").attr("id", "long-loc").text("Please enter a proper location name, zip code, city, or geolocation coordinate");
 
-            locationTooLong.append(longLocationHeader);
+            throwError("Please enter a proper location name, zip code, city, or geolocation coordinate");
 
-            $("#results").append(locationTooLong);
-            return false;
-        }
-        else {
-            $("#long-loc").remove();
-            $("#long-name").remove();
+        } else {
+
             getEvents(artistSearch, locationSearch, searchTime, resultsSearch, nearbySearch);
+
+            if (initialSearch) {
+
+                // Hides the main search bar
+                $(".first-search-row").css("display", "none");
+                $("#user-search-1").css("display", "inline");
+                $("#navbar-toggly").css("display", "inline");
+
+                //Stops the running carousel and empties the sliders div
+                $('.carousel').carousel("pause");
+                $("#sliders").empty();
+                $("#sliders").css("display", "none");
+
+                // Makes sure this method only runs once!
+                initialSearch = false;
+            }
+
         };
 
         
-        if (initialSearch) {
-
-            // Hides the main search bar
-            $(".first-search-row").css("display", "none");
-            $("#user-search-1").css("display", "inline");
-            $("#navbar-toggly").css("display", "inline");
-
-            //Stops the running carousel and empties the sliders div
-            $('.carousel').carousel("pause");
-            $("#sliders").empty();
-            $("#sliders").css("display", "none");
-
-            // Makes sure this method only runs once!
-            initialSearch = false;
-        }
+        
 
         // When using expanded search bar at small screen sizes, forces collapse after submit
         $('.navbar-collapse').collapse('hide');
