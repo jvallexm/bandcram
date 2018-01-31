@@ -301,7 +301,7 @@ function getYouTubeVideo(q, i) {
 
 }
 
-// Returns a div with the classes passed as a parameter
+// Returns a div with the classes passed as a parameter .
 
 function newDiv(addClass) {
 
@@ -541,6 +541,8 @@ $(document).ready(function(){
     $("#pause").on("click",function(){
         $('.carousel').carousel("pause"); 
     });
+
+    $("#carousel").removeClass("carousel");
 
     for(let i=0; i<ourPicks.length; ++i){
         getEventById(ourPicks[i].id,i,ourPicks[i].name,true);
