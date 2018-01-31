@@ -31,8 +31,6 @@ function sliderMapCallback() {
             $("#panel-" + i).appendTo("#carousel");
         }
 
-        $("#slider").addClass("carousel"); // Adds the carousel class
-
         $('.carousel').carousel({          // Makes the carousel play
             interval: 4000
         });
@@ -679,8 +677,6 @@ $(document).ready(function () {
     $("#pause").on("click", function () {
         $('.carousel').carousel("pause");
     });
-
-    $("#carousel").removeClass("carousel");
 
     for(let i=0; i<ourPicks.length; ++i){
         getEventById(ourPicks[i].id,i,ourPicks[i].name,true);
