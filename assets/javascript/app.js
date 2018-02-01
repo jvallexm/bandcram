@@ -99,6 +99,8 @@ function getEvents(q, where, date, results, near){
             let event       = eventsArray[i];        // Reference to the current event
             let eventTime   = event.start_time;      // Reference to the event start time
             let displayTime = timeFormat(eventTime); // Converts the start time to a readable format
+            let space = " "
+            let eventDesc = `${event.venue_name} -- ${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code}`;
 
             // Creates a new panel for each of the returned events
 
@@ -108,6 +110,8 @@ function getEvents(q, where, date, results, near){
                 image = event.image.medium.url;
 
             renderResult(i, event.title, image, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); 
+
+
 
             let search;  // Variable for YouTube Search
 
@@ -122,7 +126,7 @@ function getEvents(q, where, date, results, near){
             else                                                  // if only one performer is listed 
                 search = event.performers.performer.name;         
       
-            // Renders a YouTube video based on the search and index i 
+            // populate PH column event information and buy tickets link based on the event and postal code index i 
             setEventPlaceHolder(i, event.title, event.venue_name, displayTime, event.postal_code);
 
             // Renders a YouTube video based on the search and index i 
@@ -146,6 +150,7 @@ function getEvents(q, where, date, results, near){
 
 function setEventPlaceHolder(i, title, venue, time, postalCode)
 {
+    $("#ph-" + i).empty();
     var div = $("<div/>");
     div.css({
         "width" : "600px",
@@ -173,12 +178,15 @@ function setEventPlaceHolder(i, title, venue, time, postalCode)
             console.log(e);
             if (e._embedded !== undefined) {
                 if (e._embedded.events !== undefined) {
-                    console.log(e._embedded.events[0].url);
+                    //console.log(e._embedded.events[0].url);
                     let url = e._embedded.events[0].url;
-                    /* if (e._embedded.events[0].priceRanges !== undefined) {
+                    if (e._embedded.events[0].priceRanges !== undefined) {
+                        var price = $("<h4>");
+                        price.text("Pricing Starts @ $" + e._embedded.events[0].priceRanges[0].min);
+                        div.append(price);
                         console.log(e._embedded.events[0].priceRanges[0].max);
                         console.log(e._embedded.events[0].priceRanges[0].min);
-                    } */
+                    }
                     let link = $("<a>").attr("href", url)
                         .attr("target", "_blank")
                         .text("Buy Tickets →");
@@ -195,6 +203,8 @@ function setEventPlaceHolder(i, title, venue, time, postalCode)
             }
         }
     })
+
+    div.appendTo($("#ph-" + i));
 }
 
 // Gets single events from the Eventful API for the slider
@@ -227,8 +237,9 @@ function getEventById(id, i, header, isSlider)
 
         let eventTime   = event.start_time;
         let displayTime = timeFormat(eventTime);
+        let eventDesc = `${event.venue_name} -- ${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code}`;
 
-        renderResult(i, event.title, imageIcon, `${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`,header,isSlider);
+        renderResult(i, event.title, imageIcon, eventDesc, header, isSlider);
 
         let search;
 
@@ -500,7 +511,9 @@ function renderResult(i,title,imageURL,desc,header,isSlider){
     let panelTitle = $("<h1>").text(title);
 
     // The subtitle of the panel
-    let panelDesc = $("<p>").text(desc);
+    //let panelDesc = $("<p>").text(desc);
+    let panelDesc = $("<p>")
+    panelDesc.append(desc);
 
     panel.append(panelTitle);
     panel.append(panelDesc);
