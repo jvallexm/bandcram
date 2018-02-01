@@ -276,6 +276,9 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSli
     if (near == "restaurant") {
         nearText = "Restaurants";
     }
+    else if  (near == "bar") {
+        nearText = "Bars";
+    }
     else if (near == "parking") {
         nearText = "Parking";
     };
