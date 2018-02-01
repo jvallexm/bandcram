@@ -8,6 +8,9 @@ const google_places_key = `AIzaSyDvotQLuJNpv-ba_5nzrBnkAzZP6DutQ7E`;    // Googl
 let timerOn           = false;  // The timer for queued functions
 let queuedMaps        = [];     // The functions queded
 let sliderLoadedCount = 0;      // How many sliders have been loaded on page load
+let myLat;                      // Users Latitude
+let myLon;                      // User's Longitude
+let initialSearch = true;       // User's initial search
 
 /* Creates a Loading spinner */
 
@@ -34,6 +37,15 @@ function sliderMapCallback() {
         $('.carousel').carousel({          // Makes the carousel play
             interval: 4000
         });
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+
+                myLat = position.coords.latitude;
+                myLon = position.coords.longitude;
+            });
+        }
+
 
     }
 
@@ -105,7 +117,8 @@ function getEvents(q, where, date, results, near){
             let image = "BAD_URL";
             
             if(event.image !== null)
-                image = event.image.medium.url;
+                if(event.image.medium !== null)
+                    image = event.image.medium.url;
 
             renderResult(i, event.title, image, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); 
 
@@ -586,29 +599,16 @@ const ourPicks = [
 
 $(document).ready(function () {
 
-    let myLat;
-    let myLon;
-    let initialSearch = true;
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-
-            myLat = position.coords.latitude;
-            myLon = position.coords.longitude;
-        });
-    }
-
-
     $("#user-search-1, #user-search-2").submit(function (event) {
 
         event.preventDefault();
 
-        let thisForm = this.id.split("-")[2];
-        let artistSearch = $("#input-artist-" + thisForm).val().trim();
+        let thisForm       = this.id.split("-")[2];
+        let artistSearch   = $("#input-artist-" + thisForm).val().trim();
         let locationSearch = $("#input-location-" + thisForm).val().trim();
-        let whenSearch = $("#input-date-" + thisForm).val().trim();
-        let nearbySearch = $("#input-nearby-venue-" + thisForm).val().trim();
-        let resultsSearch = $("#input-results-" + thisForm).val().trim();
+        let whenSearch     = $("#input-date-" + thisForm).val().trim();
+        let nearbySearch   = $("#input-nearby-venue-" + thisForm).val().trim();
+        let resultsSearch  = $("#input-results-" + thisForm).val().trim();
 
         let searchTime;
 
@@ -682,9 +682,6 @@ $(document).ready(function () {
             }
 
         };
-
-        
-        
 
         // When using expanded search bar at small screen sizes, forces collapse after submit
         $('.navbar-collapse').collapse('hide');
