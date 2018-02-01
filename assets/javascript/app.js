@@ -569,7 +569,7 @@ const ourPicks = [
 
   { 
     name: "David's Pick",
-    id: "E0-001-106661781-3"
+    id: "E0-001-110606044-3"
   },{
     name: "Peter's Pick",
     id: "E0-001-108184646-3"
