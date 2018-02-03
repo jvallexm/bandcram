@@ -30,15 +30,16 @@ function sliderMapCallback() {
             interval: 4000
         });
 
-        if (navigator.geolocation) {
-            console.log("trying to get geolocation data.");
-            navigator.geolocation.getCurrentPosition(function (position) {
+        setTimeout(function(){
+            if (navigator.geolocation) {
+                console.log("trying to get geolocation data.");
+                navigator.geolocation.getCurrentPosition(function (position) {
 
-                myLat = position.coords.latitude;
-                myLon = position.coords.longitude;
-            });
-        }
-
+                    myLat = position.coords.latitude;
+                    myLon = position.coords.longitude;
+                });
+            }
+        },1000);
 
     }
 
