@@ -98,7 +98,7 @@ function getEvents(q, where, date, results, near){
                 if(event.image.medium !== null)
                     image = event.image.medium.url;
 
-            renderResult(i, event.title, image, `${event.venue_address} ${event.city_name}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`); 
+            renderResult(i, event.title, image, `${"Performing " + displayTime}`); 
 
             let search;  // Variable for YouTube Search
 
@@ -113,8 +113,8 @@ function getEvents(q, where, date, results, near){
             else                                                  // if only one performer is listed 
                 search = event.performers.performer.name;         
       
-            // Renders a YouTube video based on the search and index i 
-            setEventPlaceHolder(i, event.title, event.venue_name, displayTime, event.postal_code);
+            // ??
+            setEventPlaceHolder(i, event.title, event.venue_name, event.venue_address, event.city_name, event.region_abbr, event.postal_code);
 
             // Renders a YouTube video based on the search and index i 
             getYouTubeVideo(search, i);
@@ -135,26 +135,33 @@ function getEvents(q, where, date, results, near){
 
 }
 
-function setEventPlaceHolder(i, title, venue, time, postalCode)
+function setEventPlaceHolder(i, title, venue, address, city, state, postalCode)
 {
     var div = $("<div/>");
-    div.css({
-        "width" : "600px",
-        "border" : "transparent",
-        "margin" : "20px",
-        "font-size" : "18px",
-        "font-family": "Arial, Helvetica, sans-serif",
-        "font-weight" : "bold",
-        "color" : "blue"
-    });
-    var datetime = time.split(",");
-    var day = $("<h4>");
-    var time = $("<h4>");
-    day.text(datetime[0] + "-" + datetime[1]);
-    time.text(datetime[2]);
-    div.append(day);
-    div.append(time); 
-    //div.text(venue + "\n" + time);
+    // div.css({
+    //     "width" : "600px",
+    //     "border" : "transparent",
+    //     "margin" : "20px",
+    //     "font-size" : "18px",
+    //     "font-family": "Arial, Helvetica, sans-serif",
+    //     "font-weight" : "bold",
+    //     "color" : "blue"
+    // });
+    div.addClass('venue-facts');
+    // var datetime = time.split(",");
+    // var day = $("<h3>");
+    // var time = $("<p>");
+    var venueIntro = $("<p>").text("At...");
+    var venueName = $("<h3>").addClass("venue-header").text(venue);
+    var venueAddress = $("<p>").text(address + ", " + city + " " + state + ", " + postalCode);
+    // day.text(datetime[0] + "-" + datetime[1]);
+    // time.text(datetime[2]);
+    // div.append(day);
+    // div.append(time); 
+    // div.text(venueName + "\n" + postalCode);
+    div.append(venueIntro);
+    div.append(venueName);
+    div.append(venueAddress)
     div.appendTo($("#ph-" + i));
 
     $.ajax({
@@ -219,7 +226,7 @@ function getEventById(id, i, header, isSlider)
         let eventTime   = event.start_time;
         let displayTime = timeFormat(eventTime);
 
-        renderResult(i, event.title, imageIcon, `${event.address} ${event.city}, ${event.region_abbr} ${event.postal_code} -- ${displayTime}`,header,isSlider);
+        renderResult(i, event.title, imageIcon, `${"Performing " + displayTime}`,header,isSlider);
 
         let search;
 
@@ -230,7 +237,7 @@ function getEventById(id, i, header, isSlider)
         else
             search = event.performers.performer.name;
         
-        setEventPlaceHolder(i, event.title, event.venue_name, displayTime, event.postal_code);
+        setEventPlaceHolder(i, event.title, event.venue_name, event.address, event.city, event.region_abbr, event.postal_code);
         getYouTubeVideo(search, i);
         getGoogleMap(i, event.latitude, event.longitude, "map-" + i, "parking", 1000, event.postal_code, event.venue_name, true);
 

@@ -111,14 +111,15 @@ a.navbar-brand {
     background-size: cover;
 }
 
-hr {
-    border-top-color: #ddd;
-}
-
 h1 {
     margin-top: 0;
     margin-bottom: 3px;
 }
+
+p {
+    font-weight: 300;
+/*    letter-spacing: .5px;
+*/}
 
 .table {
     margin: 10px;
@@ -258,12 +259,26 @@ margin-top: 15px;
 }
 
 .circle-image {
-    border-radius: 25%;
+    border-bottom-right-radius: 25%;
+border-bottom-left-radius: 25%;
     height: 57px;
     width: 57px;
 
 }
 
+.venue-facts {
+    padding: 8px;
+}
+
+.venue-facts > p {
+    margin-bottom: 0;
+}
+
+h3.venue-header {
+    margin-top: 0;
+    margin-bottom: 1px;
+    font-weight: 400;
+}
 
 
 /* responsive screen size */
