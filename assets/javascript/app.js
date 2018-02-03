@@ -472,11 +472,14 @@ $(document).ready(function () {
 
             searchTime = moment().add(1, "M").format("MMMM");
 
-        };
+        }
 
         if (locationSearch == "Near Me" || locationSearch == "") {
 
-            locationSearch = `${myLat}, ${myLon}`;
+            if(myLat !== undefined && myLon !== undefined)
+                locationSearch = `${myLat}, ${myLon}`; 
+            else
+                locationSearch = "NO_LOCATION";
 
         };
 
@@ -505,7 +508,11 @@ $(document).ready(function () {
 
             throwError("Please enter a proper location name, zip code, city, or geolocation coordinate");
 
-        } else {
+        }else if(locationSearch === "NO_LOCATION"){
+
+            throwError("We need your location data to search for results near you");
+
+        }else {
 
             getEvents(artistSearch, locationSearch, searchTime, resultsSearch, nearbySearch);
 
