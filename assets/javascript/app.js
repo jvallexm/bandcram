@@ -128,7 +128,7 @@ function getEvents(q, where, date, results, near){
 
         if(eventsArray.length < results){
             console.log("results not enough");
-            makeNope(`Sorry, we could only find ${eventsArray.length} events`,"Try searching for something else");
+            makeNope(`We found ${eventsArray.length} events!`,"Try a different search to find more.");
         }
 
     });
