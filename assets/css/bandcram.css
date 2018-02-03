@@ -272,12 +272,14 @@ border-bottom-left-radius: 25%;
 
 .venue-facts > p {
     margin-bottom: 0;
+    color: rgba(0,0,0,.6);
 }
 
 h3.venue-header {
     margin-top: 0;
     margin-bottom: 1px;
     font-weight: 400;
+    color: rgba(0,0,0,.6);
 }
 
 
