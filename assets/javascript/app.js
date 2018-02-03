@@ -75,6 +75,8 @@ function getEvents(q, where, date, results, near){
 
 
             makeNope("Sorry, we couldn't find any events like that :(","Try searching for something else");
+            $("#go-btn-1").prop("disabled",false);
+            $("#go-btn-2").prop("disabled",false);
             return false; // Returns after null search 
 
         }
@@ -125,6 +127,9 @@ function getEvents(q, where, date, results, near){
 
 
         }
+
+        $("#go-btn-1").prop("disabled",false);
+        $("#go-btn-2").prop("disabled",false);
 
         if(eventsArray.length < results){
             console.log("results not enough");
@@ -515,6 +520,8 @@ $(document).ready(function () {
         }else {
 
             getEvents(artistSearch, locationSearch, searchTime, resultsSearch, nearbySearch);
+            $("#go-btn-1").prop("disabled","disabled");
+            $("#go-btn-2").prop("disabled","disabled");
 
             if (initialSearch) {
 
