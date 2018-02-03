@@ -30,14 +30,16 @@ function sliderMapCallback() {
             interval: 4000
         });
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
+        setTimeout(function(){
+            if (navigator.geolocation) {
+                console.log("trying to get geolocation data.");
+                navigator.geolocation.getCurrentPosition(function (position) {
 
-                myLat = position.coords.latitude;
-                myLon = position.coords.longitude;
-            });
-        }
-
+                    myLat = position.coords.latitude;
+                    myLon = position.coords.longitude;
+                });
+            }
+        },1000);
 
     }
 
@@ -75,6 +77,8 @@ function getEvents(q, where, date, results, near){
 
 
             makeNope("Sorry, we couldn't find any events like that :(","Try searching for something else");
+            $("#go-btn-1").prop("disabled",false);
+            $("#go-btn-2").prop("disabled",false);
             return false; // Returns after null search 
 
         }
@@ -126,6 +130,9 @@ function getEvents(q, where, date, results, near){
 
         }
 
+        $("#go-btn-1").prop("disabled",false);
+        $("#go-btn-2").prop("disabled",false);
+
         if(eventsArray.length < results){
             console.log("results not enough");
             makeNope(`We found ${eventsArray.length} events!`,"Try a different search to find more.");
@@ -138,27 +145,10 @@ function getEvents(q, where, date, results, near){
 function setEventPlaceHolder(i, title, venue, address, city, state, postalCode)
 {
     var div = $("<div/>");
-    // div.css({
-    //     "width" : "600px",
-    //     "border" : "transparent",
-    //     "margin" : "20px",
-    //     "font-size" : "18px",
-    //     "font-family": "Arial, Helvetica, sans-serif",
-    //     "font-weight" : "bold",
-    //     "color" : "blue"
-    // });
     div.addClass('venue-facts');
-    // var datetime = time.split(",");
-    // var day = $("<h3>");
-    // var time = $("<p>");
     var venueIntro = $("<p>").text("At...");
     var venueName = $("<h3>").addClass("venue-header").text(venue);
     var venueAddress = $("<p>").text(address + ", " + city + " " + state + ", " + postalCode);
-    // day.text(datetime[0] + "-" + datetime[1]);
-    // time.text(datetime[2]);
-    // div.append(day);
-    // div.append(time); 
-    // div.text(venueName + "\n" + postalCode);
     div.append(venueIntro);
     div.append(venueName);
     div.append(venueAddress)
@@ -173,10 +163,6 @@ function setEventPlaceHolder(i, title, venue, address, city, state, postalCode)
                 if (e._embedded.events !== undefined) {
                     console.log(e._embedded.events[0].url);
                     let url = e._embedded.events[0].url;
-                    /* if (e._embedded.events[0].priceRanges !== undefined) {
-                        console.log(e._embedded.events[0].priceRanges[0].max);
-                        console.log(e._embedded.events[0].priceRanges[0].min);
-                    } */
                     let link = $("<a>").attr("href", url)
                         .attr("target", "_blank")
                         .text("Buy Tickets →");
@@ -279,7 +265,7 @@ function getGoogleMap(i, lat, lon, div, near, radius, postalcode, address, isSli
     }
     else if (near == "parking") {
         nearText = "Parking";
-    };
+    }
 
     //$("#ph-title-" + i).text(address);
 
@@ -481,7 +467,7 @@ $(document).ready(function () {
             else
                 locationSearch = "NO_LOCATION";
 
-        };
+        }
 
         $("#error").remove();
 
@@ -515,6 +501,8 @@ $(document).ready(function () {
         }else {
 
             getEvents(artistSearch, locationSearch, searchTime, resultsSearch, nearbySearch);
+            $("#go-btn-1").prop("disabled","disabled");
+            $("#go-btn-2").prop("disabled","disabled");
 
             if (initialSearch) {
 
